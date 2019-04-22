@@ -17,9 +17,11 @@ export const getters = {
       country: state.country,
       province: state.province,
       myActiveActions: state.myActiveActions,
+      pendingFriendRequests: state.pendingFriendRequests,
       profileImage: state.profileImage,
       postalCode: state.postalCode,
       companyName: state.companyName,
+      requestedFriends: state.requestedFriends,
       companyWebsite: state.companyWebsite,
       companyType: state.companyType,
       companyRate: state.companyRate,
@@ -27,6 +29,18 @@ export const getters = {
       companyImage: state.companyImage
     }
     return data
+  },
+
+  fullName (state) {
+    return state.fullName
+  },
+
+  pendingFriendRequests (state) {
+    return state.pendingFriendRequests || {}
+  },
+
+  requestedFriends (state) {
+    return state.requestedFriends || {}
   },
 
   myActiveActions (state) {

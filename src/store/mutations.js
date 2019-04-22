@@ -65,6 +65,8 @@ export const mutations = {
     state.address = item.address
     state.myActiveActions = item.myActions
     state.city = item.city
+    state.requestedFriends = item.requestedFriends || {}
+    state.pendingFriendRequests = item.pendingFriendRequests || {}
     state.country = item.country
     state.province = item.province
     state.postalCode = item.postalCode
@@ -77,6 +79,11 @@ export const mutations = {
     if (item.profileImage) {
       state.profileImage = item.profileImage
     }
+  },
+
+  [types.SAVE_NEW_FRIEND_REQUEST] (state, item) {
+    state.requestedFriends[item.id] = item.name
+    console.log('requested friends', state.requestedFriends)
   },
 
   [types.ADD_USER] (state, item) {

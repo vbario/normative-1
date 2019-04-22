@@ -27,6 +27,8 @@ export default new Vuex.Store({
     profileImage: null,
     companyName: null,
     companyWebsite: null,
+    requestedFriends: {},
+    pendingFriendRequests: {},
     companyType: null,
     companyRate: null,
     companyContingency: null,

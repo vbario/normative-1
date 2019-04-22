@@ -286,6 +286,31 @@ export const actions = {
   getMyProjects (state, item) {
     console.log('get my projects', item)
   },
+  requestFriend (state, item) {
+    console.log('acceptAction... action', item)
+    firebaseInstance.database().ref('users/' + item.friendid + '/pendingFriendRequests/' + item.myid).set(item.myname, () => {
+      console.log('friend requested1')
+      firebaseInstance.database().ref('users/' + item.myid + '/requestedFriends/' + item.friendid).set(item.friendname, () => {
+        console.log('friend requested')
+        state.commit('SAVE_NEW_FRIEND_REQUEST', {id: item.friendid, name: item.friendname})
+        state.dispatch('searchFriends', {query: item.searchString});
+        // firebaseInstance.database().ref('actions/' + item.actionid + '/activeUsers/' + item.userid).set(true, () => {
+        //   console.log('action added')
+        //   // route to accepted task
+        //   // router.push('/home')
+        // }).catch((error) => {
+        //   console.log('Error 3 while adding action', error)
+        // })
+      }).catch((error) => {
+        console.log('Error 2 while requesting friend', error)
+      })
+    }).catch((error) => {
+      console.log('Error 1 while requesting friend', error)
+    })
+  },
+  acceptFriend (state, item) {
+    console.log('acceptFriend action', item)
+  },
   acceptAction (state, item) {
     console.log('acceptAction... action', item)
     firebaseInstance.database().ref('users/' + item.userid + '/myActions/' + item.actionid).set(true, () => {
