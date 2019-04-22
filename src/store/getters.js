@@ -49,6 +49,10 @@ export const getters = {
     return state.campaignSearchList
   },
 
+  friendsSearchList (state) {
+    return state.friendsSearchList
+  },
+
   authError (state) {
     return state.authError
   },

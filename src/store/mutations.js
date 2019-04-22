@@ -18,6 +18,14 @@ export const mutations = {
   [types.CLEAR_SEARCH_CAMPAIGNS] (state, item) {
     state.campaignSearchList = []
   },
+  
+  [types.CLEAR_SEARCH_FRIENDS] (state, item) {
+    state.friendsSearchList = []
+  },
+
+  [types.ADD_SEARCH_FRIEND] (state, item) {
+    state.friendsSearchList.push(item)
+  },
 
   [types.ADD_SEARCH_CAMPAIGN] (state, item) {
     state.campaignSearchList.push(item)

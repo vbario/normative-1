@@ -35,6 +35,7 @@ export default new Vuex.Store({
     myProjects: {},
     myProjectDetails: {},
     campaignSearchList: [],
+    friendsSearchList: [],
     currentCampaignData: null,
     currentActionData: null,
     currentActions: [],

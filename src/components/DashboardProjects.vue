@@ -1,59 +1,63 @@
 <template>
-  <div class="wrap page1 f1 df">
-    <div class="wrap-inner f1 df fdr">
-      Friends
-      <!-- <News/> -->
+  <div class="wrap page1 f1 df fdc">
+    <input v-on:input="searchFriends()" v-model="searchString" type="text" class="search-bar" placeholder="Search for new friends by name or email">
+    <!-- <button v-on:click="showCampaigns()">x</button> -->
+    <div class="wrap-inner f1 df fdc">
+      <div v-for="(friend, index) in this.$store.getters.friendsSearchList" v-if="friend.id !== $store.getters.uid" v-bind:key="index" class="friend-found df fdr aic">
+        <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
+        <p>{{ friend.name }}</p>
+        <p class="request-friend">Request</p>
+      </div>
+<!--       <CampaignCard v-for="(campaign, index) in this.$store.getters.campaignSearchList"
+                    v-bind:key="index"
+                    v-bind:name="campaign.details.name"
+                    v-bind:cardImage="campaign.details.cardImage"
+                    v-bind:id="campaign.id"
+                    v-bind:text="campaign.details.text"/> -->
     </div>
   </div>
 </template>
 
 <script>
-// import CreateNewProject from './CreateNewProject'
-// import ProjectCard from './ProjectCard'
+// import CampaignCard from './CampaignCard'
+// import CompanyInfo from './CompanyInfo'
+// import CompanyInfoEdit from './CompanyInfoEdit'
 
 export default {
-  name: 'DashboardProjects',
+  name: 'DashboardCompany',
   data () {
     return {
-      creatingNewProject: false
+      mode: 'view', // or edit
+      searchString: ''
     }
   },
-  props: ['myProjectDetailsList'],
+  props: [],
   components: {
-    // CreateNewProject,
-    // ProjectCard
+    // CampaignCard
+    // SideBarProfile,
+    // CompanyInfo,
+    // CompanyInfoEdit
   },
   methods: {
-    addNewProject () {
-      this.creatingNewProject = true
-    },
-    closeNewProject () {
-      this.creatingNewProject = false
+    searchFriends () {
+      console.log('Searching for friends with string:', this.searchString)
+      this.$store.dispatch('searchFriends', {
+        query: this.searchString
+      }).then(() => {
+        console.log('After searching friends', this.$store.getters.friendsSearchList)
+      })
     }
   },
   computed: {
-    // allProjects: {
-    //     get: function() {
-    //         let projects = this.$store.getters.myProjectListWithDetails;
-    //         return projects;
-    //     }
-    // }
-  },
-  watch: {
-    // allProjects: {
-    //   handler: (newProp, oldProp) => {console.log('projects changed', newProp, oldProp)},
-    //   deep: true,
-    //   immediate: true
-    // }
+
   },
   created () {
-    // var callback = function(a, b) {
-    //   console.log('projects changed', a, b)
-    // }
-
-    // this.$watch('allProjects', callback, {
-    //   deep: true
-    // })
+    this.$store.dispatch('clearSearchFriends', {
+    }).then(() => {
+      console.log('After clearing friends search')
+    })
+    // this.searchCampaigns()
+    // console.log('** Login Component Loaded')
   }
 }
 </script>
@@ -61,71 +65,49 @@ export default {
 <style scoped lang="scss">
 .wrap {
   width: 100%;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flex;
-  display: -o-flex;
-  display: flex;
-  /*position: relative;*/
+  padding: 0;
 }
-.wrap2 {
-  position: relative;
-  padding: 40px;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flex;
-  display: -o-flex;
-  display: flex;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
+.wrap-inner {
+  padding: 50px;
   -webkit-flex-wrap: wrap;
   -moz-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   -o-flex-wrap: wrap;
   flex-wrap: wrap;
-  flex: 1;
-  height: 100%;
+  padding-top: 15px;
+  align-items: flex-start;
 }
-.add {
-  height: 60px;
-  width: 60px;
-  background-color: #0874D8;
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.26);
-  border-radius: 50%;
-  position: absolute;
-  top: 0;
-  right: 40px;
-  transform: translateY(-50%);
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flex;
-  display: -o-flex;
-  display: flex;
-  justify-content: center;
-  -ms-align-items: center;
-  align-items: center;
-  color: white;
-  font-size: 28px;
-  font-weight: 500;
-}
-.no-projects {
-  padding: 100px 120px;
-  max-height: 300px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.request-friend {
+  border: 1px solid #007bff;
+  padding: 10px;
+  border-radius: 20px;
+  color: #007bff;
+  transition: all 0.5s;
 
-  & > p {
-    color: #000000;
-    font-size: 36px;
-    font-weight: 300;
-    letter-spacing: 1.29px;
-    line-height: 43px;
-    margin-bottom: 40px;
+  &:hover {
+    background-color: #007bff;
+    color: white;
+  }  
+}
+.friend-found {
+  height: 100px;
+  width: 100%;
+  justify-content: flex-start;
+
+  & > img {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+  }
+
+  & > p:first-of-type {
+    font-weight: 600;
+  }
+
+  & > * {
+    margin-right: 20px;
   }
 }
 </style>

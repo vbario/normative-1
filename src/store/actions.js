@@ -32,7 +32,7 @@ export const actions = {
         verificationKey: key
       }
 
-      var shortObject = item.fullName
+      var shortObject = item.fullName.toLowerCase()
 
       // var companyObject = {
       //   name: 'My Company',
@@ -162,6 +162,38 @@ export const actions = {
     // }).catch((error) => {
     //   console.log('Error getting company data', error)
     // })
+  },
+  clearSearchFriends (state, item) {
+    state.commit('CLEAR_SEARCH_FRIENDS', {})
+  },
+  searchFriends (state, item) {
+    console.log('searchFriends action', item)
+    // clear existing campaigns
+    state.commit('CLEAR_SEARCH_FRIENDS', {})
+    firebaseInstance.database().ref('usersShort').orderByValue().limitToFirst(10).startAt(item.query.toLowerCase()).endAt(item.query.toLowerCase()+"\uf8ff").once('value', (snap) => {
+      var friends = snap.val()
+      console.log('friends returned', friends)
+      for (var friend in friends) {
+        const _friend = friend
+        const _name = friends[_friend]
+        console.log('get data for this friend', _friend, _name)
+        // firebaseInstance.database().ref('campaigns/' + campaign).once('value', (campaignSnap) => {
+        //   var campaignData = campaignSnap.val()
+        //   console.log('data for one campaign:', campaignData)
+        //   // populate campaign
+        const data = {
+          id: _friend,
+          name: _name
+        }
+        state.commit('ADD_SEARCH_FRIEND', data)
+        // }).catch((error) => {
+        //   console.log('Error getting data for specific campaign', error)
+        // })
+      }
+      // state.commit('SAVE_COMPANY_DATA', data)
+    }).catch((error) => {
+      console.log('Error getting company data', error)
+    })
   },
   searchCampaigns (state, item) {
     console.log('searchCampaigns action', item)
