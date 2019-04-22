@@ -43,6 +43,10 @@ export const mutations = {
     state.currentCampaignData = item
   },
 
+  [types.SAVE_NEW_ACTION] (state, item) {
+    state.myActiveActions[item] = true
+  },
+
   [types.CURRENT_ACTION] (state, item) {
     state.currentActionData = item
   },
@@ -63,7 +67,7 @@ export const mutations = {
     state.company = item.company
     state.phone = item.phone
     state.address = item.address
-    state.myActiveActions = item.myActions
+    state.myActiveActions = item.myActions || []
     state.city = item.city
     state.requestedFriends = item.requestedFriends || {}
     state.myFriends = item.myFriends || {}

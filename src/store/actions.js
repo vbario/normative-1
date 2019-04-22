@@ -341,6 +341,29 @@ export const actions = {
       console.log('Error 1 while requesting friend', error)
     })
   },
+  completeAction (state, item) {
+    console.log('completeAction... action', item)
+    // remove me from activeUsers in campaign
+    // remove me from activeUsers in action
+    // set my myActions action variable to false
+
+    firebaseInstance.database().ref('users/' + item.userid + '/myActions/' + item.actionid).remove(() => {
+      firebaseInstance.database().ref('campaigns/' + item.campaignid + '/activeUsers/' + item.userid).remove(() => {
+        firebaseInstance.database().ref('actions/' + item.actionid + '/activeUsers/' + item.userid).remove(() => {
+          console.log('action completed')
+          router.push('/home')
+          // route to accepted task
+          // router.push('/home')
+        }).catch((error) => {
+          console.log('Error 3 while completing action', error)
+        })
+      }).catch((error) => {
+        console.log('Error 2 while completing action', error)
+      })
+    }).catch((error) => {
+      console.log('Error 1 while completing action', error)
+    })
+  },
   acceptAction (state, item) {
     console.log('acceptAction... action', item)
     firebaseInstance.database().ref('users/' + item.userid + '/myActions/' + item.actionid).set(true, () => {
@@ -348,7 +371,8 @@ export const actions = {
         firebaseInstance.database().ref('actions/' + item.actionid + '/activeUsers/' + item.userid).set(true, () => {
           console.log('action added')
           // route to accepted task
-          // router.push('/home')
+          state.commit('SAVE_NEW_ACTION', item.actionid)
+          router.push('/home')
         }).catch((error) => {
           console.log('Error 3 while adding action', error)
         })

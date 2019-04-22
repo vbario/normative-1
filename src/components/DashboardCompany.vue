@@ -7,6 +7,7 @@
                     v-bind:key="index"
                     v-bind:name="campaign.details.name"
                     v-bind:cardImage="campaign.details.cardImage"
+                    v-bind:activeUsers="campaign.details.activeUsers || {}"
                     v-bind:id="campaign.id"
                     v-bind:text="campaign.details.text"/>
     </div>

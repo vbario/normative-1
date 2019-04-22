@@ -9,6 +9,9 @@
       <div class="action-card-row">
         <p>{{ actualText }}</p>
       </div>
+      <div class="action-card-row">
+        <p>{{ friendsWorkingOnCampaign }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -22,16 +25,45 @@ export default {
       // mode: 'login' // login/register
     }
   },
-  props: ['title', 'image', 'id', 'text'],
+  props: ['title', 'image', 'id', 'text', 'activeUsers'],
   components: {
 
   },
   methods: {
     goToAction () {
       router.push('/action/' + this.id)
+    },
+    test () {
+      console.log('xxx', this.$store.getters.currentActionData)
     }
   },
   computed: {
+    friendsWorkingOnCampaign: function() {
+      console.log('friends for action', this.activeUsers || {})
+      console.log('myFriends', this.$store.getters.myFriends || {})
+      var campaignUsers = this.activeUsers || {}
+      var myFriends = this.$store.getters.myFriends || {}
+      var friendsCount = 0
+
+      for (var user in myFriends) {
+        if (campaignUsers[user]) {
+          friendsCount = friendsCount + 1
+        }
+      }
+
+      if (friendsCount > 0) {
+        var friendsString = friendsCount + ' '
+        if (friendsCount == 1) {
+          var friendsString = friendsString + 'friend is '
+        } else {
+          var friendsString = friendsString + 'friends are '
+        }
+        friendsString = friendsString + 'working on this action'
+        return friendsString
+      } else {
+        return ''
+      }
+    },
     actualName: function () {
       var maxLength = 15
       var nameString = this.title.substring(0, maxLength)
@@ -106,7 +138,7 @@ export default {
 .action-card {
   flex: 1;
   border-radius: 12px;
-  max-height: 200px;
+  max-height: 230px;
   justify-content: flex-start;
 }
 

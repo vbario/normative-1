@@ -11,6 +11,7 @@
         <ActionCard v-for="(action, index) in this.$store.getters.currentActions"
                     v-bind:key="index"
                     v-bind:title="action.details.title"
+                    v-bind:activeUsers="action.details.activeUsers"
                     v-bind:image="action.details.image"
                     v-bind:id="action.id"
                     v-bind:text="action.details.text"

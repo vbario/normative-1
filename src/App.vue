@@ -484,6 +484,14 @@ export default {
     }
 }
 
+.button-complete-action {
+  background-color: #28a745;
+
+  &:hover {
+    background-color: #218838
+  }
+}
+
 .title-row {
   height: 70px;
   display: -webkit-flex;

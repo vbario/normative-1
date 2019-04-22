@@ -10,8 +10,8 @@
       <div class="campaign-card-row">
         <p>{{ actualText }}</p>
       </div>
-      <div class="campaign-card-row">
-        <!-- <p>No friends are working on this campaign</p> -->
+      <div class="campaign-card-row campaign-card-row friends-working">
+        <p>{{ friendsWorkingOnCampaign }}</p>
       </div>
       <div class="campaign-card-row add-friends-row">
         <p><span>+</span> Add Friends</p>
@@ -30,7 +30,7 @@ export default {
       // mode: 'login' // login/register
     }
   },
-  props: ['name', 'cardImage', 'text' ,'id'],
+  props: ['name', 'cardImage', 'text', 'id', 'activeUsers'],
   components: {
 
   },
@@ -41,6 +41,32 @@ export default {
     }
   },
   computed: {
+    friendsWorkingOnCampaign: function() {
+      console.log('friends for campaign', this.activeUsers)
+      console.log('myFriends', this.$store.getters.myFriends)
+      var campaignUsers = this.activeUsers || {}
+      var myFriends = this.$store.getters.myFriends || {}
+      var friendsCount = 0
+
+      for (var user in myFriends) {
+        if (campaignUsers[user]) {
+          friendsCount = friendsCount + 1
+        }
+      }
+
+      if (friendsCount > 0) {
+        var friendsString = friendsCount + ' '
+        if (friendsCount == 1) {
+          var friendsString = friendsString + 'friend is '
+        } else {
+          var friendsString = friendsString + 'friends are '
+        }
+        friendsString = friendsString + 'working on this campaign'
+        return friendsString
+      } else {
+        return ''
+      }
+    },
     actualName: function () {
       var maxLength = 15
       var nameString = this.name.substring(0, maxLength)
@@ -159,16 +185,7 @@ export default {
   padding: 10px 20px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+.friends-working {
+  font-weight: 600;
+}
 </style>

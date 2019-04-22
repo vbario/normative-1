@@ -12,7 +12,7 @@
         </p>
       </div>
       <hr>
-      <div class="campaign-row text-row">
+      <div class="campaign-row text-row" v-on:click="test">
         <p>{{ this.$store.getters.currentActionData.details.text }}</p>
       </div>
       <hr>
@@ -20,14 +20,18 @@
         <p v-html="this.$store.getters.currentActionData.details.instructions"></p>
       </div>
       <div class="campaign-row button-row df jcc aic">
-        <button class="button-action" v-on:click="acceptAction()">Accept Action</button>
+        <button class="button-action button-complete-action" v-if="(this.$store.getters.myActiveActions || {})[this.$route.params.actionid]" v-on:click="completeAction()">Complete Action</button>
+        <button class="button-action" v-else v-on:click="acceptAction()">Accept Action</button>
       </div>
-     <!-- <div class="campaign-row campaign-card-row">
-        <p>No friends are working on this campaign</p>
+      <!-- <div class="campaign-row button-row df jcc aic">
+        <button class="button-action" v-on:click="acceptAction()">Complete Action</button>
+      </div> -->
+      <div class="campaign-row campaign-card-row">
+        <p>{{ friendsWorkingOnCampaign }}</p>
       </div>
       <div class="campaign-row add-friends-row df">
         <p><span>+</span> Add Friends</p>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +49,10 @@ export default {
   components: {
   },
   methods: {
+    test () {
+      var actionid = this.$route.params.actionid
+      console.log('test', this.$store.getters.myActiveActions, actionid)
+    },
     acceptAction () {
       console.log('accept action')
       this.$store.dispatch('acceptAction', {
@@ -54,13 +62,48 @@ export default {
       }).then(() => {
         console.log('After getting action data')
       })
+    },
+    completeAction () {
+      console.log('complete action')
+      this.$store.dispatch('completeAction', {
+        userid: this.$store.getters.uid,
+        actionid: this.$store.getters.currentActionData.id,
+        campaignid: this.$store.getters.currentActionData.details.organizationid
+      }).then(() => {
+        console.log('After completing action')
+      })
     }
     // goToCampaignAction () {
     //   router.push('/campaign/' + this.$store.getters.currentCampaignData.id + '/actions')
     // }
   },
   computed: {
+    friendsWorkingOnCampaign: function() {
+      console.log('friends for action', this.$store.getters.currentActionData.details.activeUsers || {})
+      console.log('myFriends', this.$store.getters.myFriends || {})
+      var campaignUsers = this.$store.getters.currentActionData.details.activeUsers || {}
+      var myFriends = this.$store.getters.myFriends || {}
+      var friendsCount = 0
 
+      for (var user in myFriends) {
+        if (campaignUsers[user]) {
+          friendsCount = friendsCount + 1
+        }
+      }
+
+      if (friendsCount > 0) {
+        var friendsString = friendsCount + ' '
+        if (friendsCount == 1) {
+          var friendsString = friendsString + 'friend is '
+        } else {
+          var friendsString = friendsString + 'friends are '
+        }
+        friendsString = friendsString + 'working on this action'
+        return friendsString
+      } else {
+        return ''
+      }
+    }
   },
   created () {
     var actionid = this.$route.params.actionid

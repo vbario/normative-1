@@ -18,8 +18,8 @@
       <div class="campaign-row button-row df jcc aic">
         <button class="button-action" v-on:click="goToCampaignAction()">Get Started With An Action</button>
       </div>
-      <div class="campaign-row campaign-card-row">
-        <!-- <p>No friends are working on this campaign</p> -->
+      <div class="campaign-row campaign-card-row friends-working">
+        <p>{{ friendsWorkingOnCampaign }}</p>
       </div>
       <div class="campaign-row add-friends-row df">
         <p><span>+</span> Add Friends</p>
@@ -46,7 +46,32 @@ export default {
     }
   },
   computed: {
+    friendsWorkingOnCampaign: function() {
+      console.log('friends for campaign', this.$store.getters.currentCampaignData.details.activeUsers || {})
+      console.log('myFriends', this.$store.getters.myFriends || {})
+      var campaignUsers = this.$store.getters.currentCampaignData.details.activeUsers || {}
+      var myFriends = this.$store.getters.myFriends || {}
+      var friendsCount = 0
 
+      for (var user in myFriends) {
+        if (campaignUsers[user]) {
+          friendsCount = friendsCount + 1
+        }
+      }
+
+      if (friendsCount > 0) {
+        var friendsString = friendsCount + ' '
+        if (friendsCount == 1) {
+          var friendsString = friendsString + 'friend is '
+        } else {
+          var friendsString = friendsString + 'friends are '
+        }
+        friendsString = friendsString + 'working on this campaign'
+        return friendsString
+      } else {
+        return ''
+      }
+    }
   },
   created () {
     var campaignID = this.$route.params.id
@@ -101,6 +126,9 @@ export default {
 }
 .button-row {
   padding: 50px;
+}
+.friends-working {
+  font-weight: 600;
 }
 hr {
   width: 100%;
