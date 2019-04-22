@@ -208,6 +208,25 @@ export const actions = {
         })
     }
   },
+  getActionData (state, item) {
+    console.log('getCampaignData action')
+    firebaseInstance.database().ref('actions/' + item.id).once('value', (actionSnap) => {
+      var actionData = actionSnap.val()
+      console.log('data for current action:', actionData)
+      // // populate action
+      const data = {
+        id: item.id,
+        details: actionData
+      }
+      state.commit('CURRENT_ACTION', data)
+      // if (item.after == 'getActions') {
+      //   var data2 = actionData.actions
+      //   state.dispatch('getCampaignActions', data2);
+      // }
+    }).catch((error) => {
+      console.log('Error getting data for specific action', error)
+    })
+  },
   getCampaignData (state, item) {
     console.log('getCampaignData action')
     firebaseInstance.database().ref('campaigns/' + item.id).once('value', (campaignSnap) => {
@@ -229,5 +248,14 @@ export const actions = {
   },
   getMyProjects (state, item) {
     console.log('get my projects', item)
+  },
+  acceptAction (state, item) {
+    console.log('acceptAction... action', item)
+    // firebaseInstance.database().ref('usersShort/' + data.uid).set(shortObject, () => {
+    //   console.log('short user created created')
+    //   state.commit('CLEAR_AUTH_ERROR', {})
+    // }).catch((error) => {
+    //   console.log('Error creating company', error)
+    // })
   }
 }

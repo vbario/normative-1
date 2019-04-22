@@ -31,6 +31,10 @@ export const getters = {
   currentCampaignData (state) {
     return state.currentCampaignData
   },
+
+  currentActionData (state) {
+    return state.currentActionData
+  },
   
   currentActions (state) {
     return state.currentActions

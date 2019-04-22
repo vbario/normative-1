@@ -35,6 +35,10 @@ export const mutations = {
     state.currentCampaignData = item
   },
 
+  [types.CURRENT_ACTION] (state, item) {
+    state.currentActionData = item
+  },
+
   [types.LOGGED_IN] (state, item) {
     state.uid = item.uid
   },

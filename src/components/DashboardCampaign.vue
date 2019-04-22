@@ -1,6 +1,6 @@
 <template>
   <div class="wrap page1 f1 df">
-    <div class="wrap-inner f1 df fdc">
+    <div v-if="this.$store.getters.currentCampaignData" class="wrap-inner f1 df fdc">
       <div class="campaign-row title-row">
         <p>{{ this.$store.getters.currentCampaignData.details.name }}</p>
       </div>

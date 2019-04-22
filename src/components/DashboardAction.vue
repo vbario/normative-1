@@ -1,26 +1,29 @@
 <template>
   <div class="wrap page1 f1 df">
-    <div class="wrap-inner f1 df fdc">
-      Action
-      <!-- <div class="campaign-row title-row">
-        <p>{{ this.$store.getters.currentCampaignData.details.name }}</p>
+    <div v-if="this.$store.getters.currentActionData" class="wrap-inner f1 df fdc">
+      <div class="campaign-row title-row">
+        <p>{{ this.$store.getters.currentActionData.details.title }}</p>
       </div>
-      <div class="campaign-row">
-        <img class="top-image" v-bind:src="this.$store.getters.currentCampaignData.details.cardImage">
-      </div>
-      <div class="campaign-row df fdr org-row">
-        <p class="org-image df jcc aic tac">org img</p>
-        <p class="">Org Name</p>
-      </div>
-      <div class="campaign-row">
-        <p>{{ this.$store.getters.currentCampaignData.details.text }}</p>
+      <div class="campaign-row df fdr">
+        <img class="action-image" v-bind:src="this.$store.getters.currentActionData.details.image">
+        <p class="f1 df fdc jcc aic title-and-org">
+          <span>{{ this.$store.getters.currentActionData.details.title }}</span>
+          <span>{{ this.$store.getters.currentActionData.details.organization }}</span>
+        </p>
       </div>
       <hr>
-      <div class="campaign-row button-row df jcc aic">
-        <button class="button-action" v-on:click="goToCampaignAction()">Get Started With An Action</button>
+      <div class="campaign-row text-row">
+        <p>{{ this.$store.getters.currentActionData.details.text }}</p>
       </div>
-      <div class="campaign-row campaign-card-row"> -->
-        <!-- <p>No friends are working on this campaign</p>
+      <hr>
+      <div class="campaign-row text-row">
+        <p v-html="this.$store.getters.currentActionData.details.instructions"></p>
+      </div>
+      <div class="campaign-row button-row df jcc aic">
+        <button class="button-action" v-on:click="acceptAction()">Accept Action</button>
+      </div>
+     <!-- <div class="campaign-row campaign-card-row">
+        <p>No friends are working on this campaign</p>
       </div>
       <div class="campaign-row add-friends-row df">
         <p><span>+</span> Add Friends</p>
@@ -42,6 +45,14 @@ export default {
   components: {
   },
   methods: {
+    acceptAction () {
+      console.log('accept action')
+      this.$store.dispatch('acceptAction', {
+        id: this.$store.getters.currentActionData.id
+      }).then(() => {
+        console.log('After getting action data')
+      })
+    }
     // goToCampaignAction () {
     //   router.push('/campaign/' + this.$store.getters.currentCampaignData.id + '/actions')
     // }
@@ -50,13 +61,13 @@ export default {
 
   },
   created () {
-    var params = this.$route.params
-    console.log('** Action Component Loaded', params)
-    // this.$store.dispatch('getCampaignData', {
-    //   id: campaignID
-    // }).then(() => {
-    //   console.log('After getting campaign data')
-    // })
+    var actionid = this.$route.params.actionid
+    console.log('** Action Component Loaded', actionid)
+    this.$store.dispatch('getActionData', {
+      id: actionid
+    }).then(() => {
+      console.log('After getting action data')
+    })
   }
 }
 </script>
@@ -100,10 +111,29 @@ export default {
   object-fit: cover;
   object-position: center;
 }
+.action-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  object-position: center;
+}
 .button-row {
   padding: 50px;
 }
 hr {
   width: 100%;
+}
+.title-and-org {
+  & > span:first-child {
+    font-weight: 600;
+  }
+
+  & > span:last-child {
+    margin-top: 12px;
+  }
+}
+.text-row {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 </style>

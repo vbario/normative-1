@@ -6,8 +6,8 @@
       <div class="campaign-row title-row">
         <p>Explore Actions</p>
       </div>
-      <p v-if="this.$store.getters.currentActions.length == 0">{{ loadingText }}</p>
-      <div v-else class="actions-wrapper df fdr f1">
+      <!-- <p v-if="this.$store.getters.currentActions.length == 0">{{ loadingText }}</p> -->
+      <div class="actions-wrapper df fdr f1">
         <ActionCard v-for="(action, index) in this.$store.getters.currentActions"
                     v-bind:key="index"
                     v-bind:title="action.details.title"
