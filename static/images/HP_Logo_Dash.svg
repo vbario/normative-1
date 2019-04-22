@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="82px" height="86px" viewBox="0 0 82 86" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>AEAC892F-4AD4-4523-BA0F-9C6D52180490</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <linearGradient x1="-70.0195312%" y1="100%" x2="173.730469%" y2="-13.5426241%" id="linearGradient-1">
+            <stop stop-color="#FF557C" offset="0%"></stop>
+            <stop stop-color="#EC2C7E" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-599.000000, -42.000000)" id="Header">
+            <g transform="translate(0.000000, -1.000000)">
+                <g id="HP---Logo-Dash" transform="translate(597.000000, 43.000000)">
+                    <text id="HourPrice-Copy-5" font-family="Roboto-Regular, Roboto" font-size="18.7416332" font-weight="normal" fill="#FFFFFF">
+                        <tspan x="0.566528022" y="85">Hour</tspan>
+                        <tspan x="41.289315" y="85" font-family="Roboto-Medium, Roboto" font-weight="400">Price</tspan>
+                    </text>
+                    <g id="Icon" transform="translate(13.000000, 0.000000)">
+                        <g id="Group-8">
+                            <polygon id="Rectangle-6-Copy" fill="#FFCE48" points="51.7919475 46.7623558 51.7919475 -2.04386826e-14 42.7581909 -2.84217094e-14 42.7581909 46.7623558"></polygon>
+                            <polygon id="Rectangle-6-Copy-2" fill="#FF5D5D" points="37.4635202 61.2031503 37.4635202 18.4581114 28.4297636 18.4581114 28.4297636 61.2031503"></polygon>
+                            <polygon id="Rectangle-6-Copy-3" fill="url(#linearGradient-1)" points="24.0569048 46.7623558 24.0569048 6.48264457e-14 15.0231481 5.68434189e-14 15.0231481 46.7623558"></polygon>
+                            <path d="M54.2025399,60.2482409 C48.9902782,64.7151739 42.1371193,67.4713667 34.6082968,67.4713667 C18.1993248,67.4713667 4.78257705,54.3556909 4.78257705,38.1036579 C4.78257705,22.611954 17.0410444,9.87644276 32.4847828,8.83099035 L32.4847828,38.9590281 L54.2025399,60.2482409 Z" id="Shape-Copy" fill="#BDC7DE" transform="translate(29.492558, 38.151179) scale(-1, 1) rotate(-90.000000) translate(-29.492558, -38.151179) "></path>
+                        </g>
+                        <path d="M25.9935978,37.0794647 C25.6379018,36.5090931 25.4325439,35.8363397 25.4325439,35.1159027 C25.4325439,33.0549636 27.1130871,31.3842424 29.1861423,31.3842424 C31.2591974,31.3842424 32.9397406,33.0549636 32.9397406,35.1159027 C32.9397406,37.1768418 31.2591974,38.847563 29.1861423,38.847563 C28.8212072,38.847563 28.4684357,38.7957888 28.1348543,38.6992258 L15.9018996,51.3668212 L13.9845197,49.515229 L25.9935978,37.0794647 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
