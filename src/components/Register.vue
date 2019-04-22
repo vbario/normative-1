@@ -45,7 +45,7 @@ export default {
 
 <style scoped lang="scss">
 h2 {
-  color: black;
+  color: #f1646a;
   font-weight: 500;
   margin-bottom: 30px;
   align-self: center;

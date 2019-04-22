@@ -97,7 +97,7 @@ export default {
   }
 
   a {
-    color: #0874D8;
+    color: #f1646a;
   }
 
   h2 {
@@ -232,9 +232,10 @@ export default {
   .input-landing {
     width: 260px;
     height: 50px;
-    border-radius: 4px;
+    /*border-radius: 4px;*/
     border: none;
-    background-color: #f5f5f5;
+    border-bottom: 2px solid #888;
+    /*background-color: #f5f5f5;*/
     margin-bottom: 5px;
     padding: 20px;
     font-size: 14px;
@@ -248,13 +249,23 @@ export default {
 
   .button-landing {
     font-weight: 600;
-    width: 260px;
-    height: 55px;
-    border-radius: 4px;
+    width: 320px;
+    height: 45px;
+    border-radius: 20px;
     border: 0;
-    background-color: #d9edff;
-    color: #0b76d8;
-    text-transform: uppercase;
+    background-color: #f1646a;
+    color: white;
+    font-size: 24px;
+    text-transform: capitalize;
+    border: 1px solid #f1646a;
+    transition: all 0.4s;
+    margin-top: 40px;
+
+    &:hover {
+      border: 1px solid #f1646a;
+      background-color: white;
+      color: #f1646a;
+    }
   }
 
   .button-sidebar-2 {
@@ -407,6 +418,7 @@ export default {
     -ms-align-items: center;
     align-items: center;
     justify-content: center;
+    align-self: center;
   }
 
   .search-bar {

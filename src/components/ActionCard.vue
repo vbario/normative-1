@@ -138,7 +138,7 @@ export default {
 .action-card {
   flex: 1;
   border-radius: 12px;
-  max-height: 230px;
+  max-height: 250px;
   justify-content: flex-start;
 }
 
