@@ -22,6 +22,14 @@ export const mutations = {
   [types.CLEAR_SEARCH_FRIENDS] (state, item) {
     state.friendsSearchList = []
   },
+  
+  [types.CLEAR_JUST_INVITED] (state, item) {
+    state.justInvitedFriends = {}
+  },
+  
+  [types.JUST_INVITED] (state, item) {
+    state.justInvitedFriends[item] = true
+  },
 
   [types.ADD_SEARCH_FRIEND] (state, item) {
     state.friendsSearchList.push(item)
@@ -29,6 +37,10 @@ export const mutations = {
 
   [types.ADD_SEARCH_CAMPAIGN] (state, item) {
     state.campaignSearchList.push(item)
+  },
+  
+  [types.CLEAR_CAMPAIGN_INVITES] (state, item) {
+    state.campaignInvites = {}
   },
   
   [types.CLEAR_CURRENT_ACTIONS] (state, item) {
@@ -70,6 +82,7 @@ export const mutations = {
     state.myActiveActions = item.myActions || []
     state.city = item.city
     state.requestedFriends = item.requestedFriends || {}
+    state.campaignInvites = item.campaignInvites || {}
     state.myFriends = item.myFriends || {}
     state.pendingFriendRequests = item.pendingFriendRequests || {}
     state.country = item.country

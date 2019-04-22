@@ -79,6 +79,12 @@ export default new Router({
       name: 'ActionPage',
       component: DashboardPage,
       props: { dashboardPage: 'action', headerMode: 'full' }
+    },
+    {
+      path: '/inviteFriendToCampaign/:campaignid',
+      name: 'InviteToCampaignPage',
+      component: DashboardPage,
+      props: { dashboardPage: 'inviteFriendToCampaign', headerMode: 'full' }
     }
   ]
 })

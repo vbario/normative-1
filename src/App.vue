@@ -230,7 +230,7 @@ export default {
   }
 
   .input-landing {
-    width: 260px;
+    width: 100%;
     height: 50px;
     /*border-radius: 4px;*/
     border: none;
@@ -238,7 +238,7 @@ export default {
     /*background-color: #f5f5f5;*/
     margin-bottom: 5px;
     padding: 20px;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .account-caption {

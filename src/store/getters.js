@@ -21,6 +21,7 @@ export const getters = {
       pendingFriendRequests: state.pendingFriendRequests,
       profileImage: state.profileImage,
       postalCode: state.postalCode,
+      campaignInvites: state.campaignInvites,
       companyName: state.companyName,
       requestedFriends: state.requestedFriends,
       companyWebsite: state.companyWebsite,
@@ -34,6 +35,14 @@ export const getters = {
 
   fullName (state) {
     return state.fullName
+  },
+
+  campaignInvites (state) {
+    return state.campaignInvites || {}
+  },
+
+  justInvitedFriends (state) {
+    return state.justInvitedFriends || {}
   },
 
   pendingFriendRequests (state) {

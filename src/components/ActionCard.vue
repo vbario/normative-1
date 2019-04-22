@@ -54,9 +54,9 @@ export default {
       if (friendsCount > 0) {
         var friendsString = friendsCount + ' '
         if (friendsCount == 1) {
-          var friendsString = friendsString + 'friend is '
+          friendsString = friendsString + 'friend is '
         } else {
-          var friendsString = friendsString + 'friends are '
+          friendsString = friendsString + 'friends are '
         }
         friendsString = friendsString + 'working on this action'
         return friendsString

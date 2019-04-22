@@ -1,5 +1,5 @@
 <template>
-  <div class="df fdc">
+  <div class="df fdc jcc aic">
     <h2>Create your account</h2>
     <input v-model="fullName" class="input-landing" type="text" placeholder="Full Name"/>
     <input v-model="email" class="input-landing" type="email" placeholder="Email Address"/>

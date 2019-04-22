@@ -286,6 +286,38 @@ export const actions = {
   getMyProjects (state, item) {
     console.log('get my projects', item)
   },
+  acceptCampaignInvite (state, item) {
+    console.log('acceptCampaignInvite... action', item)
+    firebaseInstance.database().ref('users/' + item.myid + '/campaignInvites/' + item.campaignid).remove(() => {
+      console.log('campaign invite accepted')
+      state.commit('CLEAR_CAMPAIGN_INVITES', {})
+      router.push('/campaign/' + item.campaignid)
+    }).catch((error) => {
+      console.log('Error accepting campaign invite', error)
+    })
+  },
+  clearInvitedFriends (state, item) {
+    state.commit('CLEAR_JUST_INVITED', {})
+  },
+  inviteFriendToCampaign (state, item) {
+    console.log('acceptAction... action', item)
+
+    var inviteObject = {
+      userID: item.myid,
+      userName: item.myname,
+      campaignName: item.campaignName
+    }
+    
+    firebaseInstance.database().ref('users/' + item.friendid + '/campaignInvites/' + item.campaignid).set(inviteObject, () => {
+      console.log('friend invite added')
+      state.commit('JUST_INVITED', item.friendid)
+      state.dispatch('searchFriends', {query: ''});
+      // route to accepted task
+      // router.push('/home')
+    }).catch((error) => {
+      console.log('Error inviting friend to campaign', error)
+    })
+  },
   requestFriend (state, item) {
     console.log('acceptAction... action', item)
     firebaseInstance.database().ref('users/' + item.friendid + '/pendingFriendRequests/' + item.myid).set(item.myname, () => {

@@ -21,7 +21,7 @@
       <div class="campaign-row campaign-card-row friends-working">
         <p>{{ friendsWorkingOnCampaign }}</p>
       </div>
-      <div class="campaign-row add-friends-row df">
+      <div v-on:click="startFriendInvite($route.params.id, $store.getters.currentCampaignData.details.name)" class="campaign-row add-friends-row df">
         <p><span>+</span> Add Friends</p>
       </div>
     </div>
@@ -43,6 +43,14 @@ export default {
   methods: {
     goToCampaignAction () {
       router.push('/campaign/' + this.$store.getters.currentCampaignData.id + '/actions')
+    },
+    startFriendInvite (campaignid, campaignname) {
+      console.log('startFriendInvite')
+      router.push('/inviteFriendToCampaign/' + campaignid)
+      router.push({ 
+                    path: '/inviteFriendToCampaign/' + campaignid,
+                    query: { campaignname: campaignname } 
+                  })
     }
   },
   computed: {
@@ -62,9 +70,9 @@ export default {
       if (friendsCount > 0) {
         var friendsString = friendsCount + ' '
         if (friendsCount == 1) {
-          var friendsString = friendsString + 'friend is '
+          friendsString = friendsString + 'friend is '
         } else {
-          var friendsString = friendsString + 'friends are '
+          friendsString = friendsString + 'friends are '
         }
         friendsString = friendsString + 'working on this campaign'
         return friendsString

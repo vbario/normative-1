@@ -1,44 +1,31 @@
 <template>
   <div class="wrap page1 f1 df fdc">
-    <input v-on:input="searchFriends()" v-model="searchString" type="text" class="search-bar" placeholder="Search for new friends by name or email">
+    <!-- <input v-on:input="searchFriends()" v-model="searchString" type="text" class="search-bar" placeholder="Search for new friends by name or email"> -->
     <!-- <button v-on:click="showCampaigns()">x</button> -->
     <div class="wrap-inner f1 df fdc">
-      <h2>Campagin Invites</h2>
-      <div v-for="(friend, index) in this.$store.getters.campaignInvites" v-bind:key="index" class="friend-found df fdr aic">
-        <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
-        <p v-on:click="test(friend.id)">
-          {{ friend.userName }} is inviting you to join <strong>{{ friend.campaignName }}</strong>
-        </p>
-        <!-- <p v-if="$store.getters.requestedFriends[friend.id]" class="request-friend request-sent">Sent</p> -->
-        <p class="request-friend" v-on:click="acceptCampaignInvite(index)">Accept</p>
-      </div>
-      <h2>My Friends</h2>
+      <h2 v-on:click="test">My Friends</h2>
       <div v-for="(friend, index) in this.$store.getters.myFriends" v-if="(friend.id !== $store.getters.uid) && (!$store.getters.pendingFriendRequests[friend.id])" v-bind:key="index" class="friend-found df fdr aic">
         <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
         <p v-on:click="test(friend.id)">{{ friend }}</p>
-        <!-- <p v-if="$store.getters.requestedFriends[friend.id]" class="request-friend request-sent">Sent</p>
-        <p v-else class="request-friend" v-on:click="requestFriend(friend.id, friend.name)">Request</p> -->
+        <p v-if="$store.getters.justInvitedFriends[index]" class="request-friend request-sent">Sent</p>
+        <p v-else class="request-friend" v-on:click="inviteFriendToCampaign(index)">Invite</p>
       </div>
-      <h2>Search Results</h2>
-      <div v-for="(friend, index) in this.$store.getters.friendsSearchList" v-if="(friend.id !== $store.getters.uid) && (!$store.getters.pendingFriendRequests[friend.id]) && (!$store.getters.myFriends[friend.id])" v-bind:key="index" class="friend-found df fdr aic">
-        <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
+
+
+      <!-- <h2>Search Results</h2>  -->
+      <div v-for="(friend, index) in this.$store.getters.friendsSearchList" v-if="(friend.id !== $store.getters.uid) && (!$store.getters.pendingFriendRequests[friend.id]) && (!$store.getters.myFriends[friend.id])" v-bind:key="index" class="hidden friend-found df fdr aic">
+        <!-- <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
         <p v-on:click="test(friend.id)">{{ friend.name }}</p>
         <p v-if="$store.getters.requestedFriends[friend.id]" class="request-friend request-sent">Sent</p>
-        <p v-else class="request-friend" v-on:click="requestFriend(friend.id, friend.name)">Request</p>
-      </div>
+        <p v-else class="request-friend" v-on:click="requestFriend(friend.id, friend.name)">Request</p> -->
+      </div><!-- 
       <h2>Friend Requests</h2>
       <div v-for="(friend, index) in this.$store.getters.pendingFriendRequests" v-bind:key="index" class="friend-found existing-friend df fdr aic">
         <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
         <p v-on:click="test()">Pending: {{ friend }}</p>
         <p v-if="$store.getters.requestedFriends[friend.id]" class="request-friend request-sent">Sent</p>
         <p class="request-friend" v-on:click="acceptFriend(index, friend)">Accept</p>
-      </div>
-      <div v-for="(friend, index) in this.$store.getters.requestedFriends" v-bind:key="index" class="friend-found existing-friend df fdr aic">
-        <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
-        <p v-on:click="test()">{{ friend }}</p>
-        <p class="request-friend request-sent">Sent</p>
-        <!-- <p class="request-friend" v-on:click="acceptFriend(index)">Accept</p> -->
-      </div>
+      </div> -->
 <!--       <CampaignCard v-for="(campaign, index) in this.$store.getters.campaignSearchList"
                     v-bind:key="index"
                     v-bind:name="campaign.details.name"
@@ -55,7 +42,7 @@
 // import CompanyInfoEdit from './CompanyInfoEdit'
 
 export default {
-  name: 'DashboardCompany',
+  name: 'DashboardInviteToCampaign',
   data () {
     return {
       mode: 'view', // or edit
@@ -71,15 +58,17 @@ export default {
   },
   methods: {
     test (id) {
-      console.log('...', this.$store.getters.pendingFriendRequests)
+      console.log('...', this.$store.getters.justInvitedFriends)
     },
-    acceptCampaignInvite (campaignid) {
-      console.log('accepting invite')
-      this.$store.dispatch('acceptCampaignInvite', {
+    inviteFriendToCampaign (friendid) {
+      this.$store.dispatch('inviteFriendToCampaign', {
         myid: this.$store.getters.uid,
-        campaignid: campaignid
+        friendid: friendid,
+        campaignid: this.$route.params.campaignid,
+        myname: this.$store.getters.fullName,
+        campaignName: this.$route.query.campaignname
       }).then(() => {
-        console.log('After accepting campaign invite')
+        console.log('After inviting friend to campaign')
       })
     },
     acceptFriend (id, name) {
@@ -119,12 +108,12 @@ export default {
 
   },
   created () {
-    this.$store.dispatch('clearSearchFriends', {
+    this.$store.dispatch('clearInvitedFriends', {
     }).then(() => {
-      console.log('After clearing friends search')
+      console.log('After clearing invited friends')
     })
     // this.searchCampaigns()
-    // console.log('** Login Component Loaded')
+    console.log('** Invite to campaign Component Loaded', this.$route.query.campaignname)
   }
 }
 </script>
@@ -190,5 +179,9 @@ h2 {
   & > * {
     margin-right: 20px;
   }
+}
+
+.hidden {
+  opacity: 0;
 }
 </style>

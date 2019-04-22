@@ -9,6 +9,7 @@
     <DashboardCampaign v-else-if="dashboardPage == 'campaign'"/>
     <DashboardActions v-else-if="dashboardPage == 'actions'"/>
     <DashboardAction v-else-if="dashboardPage == 'action'"/>
+    <DashboardInviteToCampaign v-else-if="dashboardPage == 'inviteFriendToCampaign'"/>
     <!-- <DashboardTasks v-else-if="dashboardPage == 'tasks'"/>
     <DashboardPeople v-else-if="dashboardPage == 'people'"/>
     <DashboardPricing v-else-if="(dashboardPage == 'company') && (subPage == 'pricing')"/>
@@ -26,6 +27,7 @@ import DashboardCampaign from '../components/DashboardCampaign'
 import DashboardActions from '../components/DashboardActions'
 import DashboardActiveActions from '../components/DashboardActiveActions'
 import DashboardAction from '../components/DashboardAction'
+import DashboardInviteToCampaign from '../components/DashboardInviteToCampaign'
 
 export default {
   name: 'Dashboard',
@@ -44,7 +46,8 @@ export default {
     DashboardActions,
     DashboardAction,
     DashboardCampaign,
-    DashboardActiveActions
+    DashboardActiveActions,
+    DashboardInviteToCampaign
     // DashboardTasks,
     // DashboardPeople,
     // DashboardBilling,
