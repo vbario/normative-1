@@ -16,6 +16,7 @@ export const getters = {
       city: state.city,
       country: state.country,
       province: state.province,
+      myFriends: state.myFriends,
       myActiveActions: state.myActiveActions,
       pendingFriendRequests: state.pendingFriendRequests,
       profileImage: state.profileImage,
@@ -37,6 +38,10 @@ export const getters = {
 
   pendingFriendRequests (state) {
     return state.pendingFriendRequests || {}
+  },
+
+  myFriends (state) {
+    return state.myFriends || {}
   },
 
   requestedFriends (state) {

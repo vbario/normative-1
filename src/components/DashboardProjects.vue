@@ -3,7 +3,15 @@
     <input v-on:input="searchFriends()" v-model="searchString" type="text" class="search-bar" placeholder="Search for new friends by name or email">
     <!-- <button v-on:click="showCampaigns()">x</button> -->
     <div class="wrap-inner f1 df fdc">
-      <div v-for="(friend, index) in this.$store.getters.friendsSearchList" v-if="(friend.id !== $store.getters.uid) && (!$store.getters.pendingFriendRequests[friend.id])" v-bind:key="index" class="friend-found df fdr aic">
+      <h2>My Friends</h2>
+      <div v-for="(friend, index) in this.$store.getters.myFriends" v-if="(friend.id !== $store.getters.uid) && (!$store.getters.pendingFriendRequests[friend.id])" v-bind:key="index" class="friend-found df fdr aic">
+        <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
+        <p v-on:click="test(friend.id)">{{ friend }}</p>
+        <!-- <p v-if="$store.getters.requestedFriends[friend.id]" class="request-friend request-sent">Sent</p>
+        <p v-else class="request-friend" v-on:click="requestFriend(friend.id, friend.name)">Request</p> -->
+      </div>
+      <h2>Search Results</h2>
+      <div v-for="(friend, index) in this.$store.getters.friendsSearchList" v-if="(friend.id !== $store.getters.uid) && (!$store.getters.pendingFriendRequests[friend.id]) && (!$store.getters.myFriends[friend.id])" v-bind:key="index" class="friend-found df fdr aic">
         <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
         <p v-on:click="test(friend.id)">{{ friend.name }}</p>
         <p v-if="$store.getters.requestedFriends[friend.id]" class="request-friend request-sent">Sent</p>
@@ -14,7 +22,7 @@
         <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
         <p v-on:click="test()">Pending: {{ friend }}</p>
         <p v-if="$store.getters.requestedFriends[friend.id]" class="request-friend request-sent">Sent</p>
-        <p class="request-friend" v-on:click="acceptFriend(index)">Accept</p>
+        <p class="request-friend" v-on:click="acceptFriend(index, friend)">Accept</p>
       </div>
       <div v-for="(friend, index) in this.$store.getters.requestedFriends" v-bind:key="index" class="friend-found existing-friend df fdr aic">
         <img class="friend-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
@@ -56,11 +64,14 @@ export default {
     test (id) {
       console.log('...', this.$store.getters.pendingFriendRequests)
     },
-    acceptFriend (id) {
+    acceptFriend (id, name) {
       console.log('accept friend with id', id)
       this.$store.dispatch('acceptFriend', {
         friendid: id,
-        myid: this.$store.getters.uid
+        myid: this.$store.getters.uid,
+        myname: this.$store.getters.fullName,
+        friendname: name,
+        searchString: this.searchString
       }).then(() => {
         console.log('After accepting friend')
       })

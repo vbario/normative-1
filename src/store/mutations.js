@@ -66,6 +66,7 @@ export const mutations = {
     state.myActiveActions = item.myActions
     state.city = item.city
     state.requestedFriends = item.requestedFriends || {}
+    state.myFriends = item.myFriends || {}
     state.pendingFriendRequests = item.pendingFriendRequests || {}
     state.country = item.country
     state.province = item.province
@@ -83,7 +84,11 @@ export const mutations = {
 
   [types.SAVE_NEW_FRIEND_REQUEST] (state, item) {
     state.requestedFriends[item.id] = item.name
-    console.log('requested friends', state.requestedFriends)
+  },
+
+  [types.SAVE_NEW_FRIEND] (state, item) {
+    delete state.pendingFriendRequests[item.friendid]
+    state.myFriends[item.friendid] = item.friendname
   },
 
   [types.ADD_USER] (state, item) {

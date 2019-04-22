@@ -310,6 +310,36 @@ export const actions = {
   },
   acceptFriend (state, item) {
     console.log('acceptFriend action', item)
+    // myid, friendid, myname, friendname
+    firebaseInstance.database().ref('users/' + item.myid + '/pendingFriendRequests/' + item.friendid).remove(() => {
+      console.log('friend requested1')
+      firebaseInstance.database().ref('users/' + item.friendid + '/requestedFriends/' + item.myid).remove(() => {
+        firebaseInstance.database().ref('users/' + item.myid + '/myFriends/' + item.friendid).set(item.friendname, () => {
+          console.log('friend requested1')
+          firebaseInstance.database().ref('users/' + item.friendid + '/myFriends/' + item.myid).set(item.myname, () => {
+            console.log('friend accepted')
+            state.commit('SAVE_NEW_FRIEND', {friendid: item.friendid, friendname: item.friendname})
+            state.dispatch('searchFriends', {query: item.searchString});
+            // state.dispatch('searchFriends', {query: item.searchString});
+            // firebaseInstance.database().ref('actions/' + item.actionid + '/activeUsers/' + item.userid).set(true, () => {
+            //   console.log('action added')
+            //   // route to accepted task
+            //   // router.push('/home')
+            // }).catch((error) => {
+            //   console.log('Error 3 while adding action', error)
+            // })
+          }).catch((error) => {
+            console.log('Error 4 while requesting friend', error)
+          })
+        }).catch((error) => {
+          console.log('Error 3 while requesting friend', error)
+        })
+      }).catch((error) => {
+        console.log('Error 2 while requesting friend', error)
+      })
+    }).catch((error) => {
+      console.log('Error 1 while requesting friend', error)
+    })
   },
   acceptAction (state, item) {
     console.log('acceptAction... action', item)
