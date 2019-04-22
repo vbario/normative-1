@@ -37,7 +37,8 @@ export default new Vuex.Store({
     campaignSearchList: [],
     currentCampaignData: null,
     currentActionData: null,
-    currentActions: []
+    currentActions: [],
+    myActiveActions: []
   },
   actions,
   mutations,

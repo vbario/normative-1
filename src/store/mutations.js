@@ -55,6 +55,7 @@ export const mutations = {
     state.company = item.company
     state.phone = item.phone
     state.address = item.address
+    state.myActiveActions = item.myActions
     state.city = item.city
     state.country = item.country
     state.province = item.province

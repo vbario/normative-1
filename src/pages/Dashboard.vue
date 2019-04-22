@@ -2,7 +2,7 @@
   <div class="wrapper df fdc jcc aic jcsb">
     <DashboardHeader  v-bind:dashboardPage="dashboardPage"
                       v-bind:headerMode="headerMode"/>
-    <DashboardHome v-if="dashboardPage == 'home'"/>
+    <DashboardActiveActions v-if="dashboardPage == 'home'"/>
     <DashboardProjects v-bind:myProjectDetailsList="myProjectDetailsList" v-else-if="dashboardPage == 'projects'"/>
     <DashboardCompany v-else-if="(dashboardPage == 'company') && (subPage == 'company')"/>
     <DashboardProfile v-else-if="dashboardPage == 'profile'"/>
@@ -24,6 +24,7 @@ import DashboardCompany from '../components/DashboardCompany'
 import DashboardProfile from '../components/DashboardProfile'
 import DashboardCampaign from '../components/DashboardCampaign'
 import DashboardActions from '../components/DashboardActions'
+import DashboardActiveActions from '../components/DashboardActiveActions'
 import DashboardAction from '../components/DashboardAction'
 
 export default {
@@ -42,7 +43,8 @@ export default {
     DashboardProfile,
     DashboardActions,
     DashboardAction,
-    DashboardCampaign
+    DashboardCampaign,
+    DashboardActiveActions
     // DashboardTasks,
     // DashboardPeople,
     // DashboardBilling,

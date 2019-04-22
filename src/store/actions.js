@@ -121,6 +121,10 @@ export const actions = {
 
         if ((item.fullPath !== '/login') && (item.fullPath !== '/register') && (item.fullPath.indexOf('verifyEmail') == -1)) {
           // stay here
+          if (item.fullPath == '/home') {
+            console.log('home path', data.myActions)
+            state.dispatch('getCampaignActions', data.myActions);
+          } 
         } else {
           router.push('/home')
         }
@@ -193,13 +197,14 @@ export const actions = {
     for (var action in item) {
         const _action = action
         const _id = item[_action]
-        console.log('get data for this action', item[_action])
-        firebaseInstance.database().ref('actions/' + item[_action]).once('value', (actionSnap) => {
+        const useThisId = item[_action] === true ? _action : item[_action]
+        console.log('get data for this action', useThisId)
+        firebaseInstance.database().ref('actions/' + useThisId).once('value', (actionSnap) => {
           var actionData = actionSnap.val()
           console.log('data for one action:', actionData)
           // populate campaign
           const data = {
-            id: _id,
+            id: useThisId,
             details: actionData
           }
           state.commit('ADD_CURRENT_ACTIONS', data)
@@ -251,11 +256,20 @@ export const actions = {
   },
   acceptAction (state, item) {
     console.log('acceptAction... action', item)
-    // firebaseInstance.database().ref('usersShort/' + data.uid).set(shortObject, () => {
-    //   console.log('short user created created')
-    //   state.commit('CLEAR_AUTH_ERROR', {})
-    // }).catch((error) => {
-    //   console.log('Error creating company', error)
-    // })
+    firebaseInstance.database().ref('users/' + item.userid + '/myActions/' + item.actionid).set(true, () => {
+      firebaseInstance.database().ref('campaigns/' + item.campaignid + '/activeUsers/' + item.userid).set(true, () => {
+        firebaseInstance.database().ref('actions/' + item.actionid + '/activeUsers/' + item.userid).set(true, () => {
+          console.log('action added')
+          // route to accepted task
+          // router.push('/home')
+        }).catch((error) => {
+          console.log('Error 3 while adding action', error)
+        })
+      }).catch((error) => {
+        console.log('Error 2 while adding action', error)
+      })
+    }).catch((error) => {
+      console.log('Error 1 while adding action', error)
+    })
   }
 }

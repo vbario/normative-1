@@ -48,7 +48,9 @@ export default {
     acceptAction () {
       console.log('accept action')
       this.$store.dispatch('acceptAction', {
-        id: this.$store.getters.currentActionData.id
+        userid: this.$store.getters.uid,
+        actionid: this.$store.getters.currentActionData.id,
+        campaignid: this.$store.getters.currentActionData.details.organizationid
       }).then(() => {
         console.log('After getting action data')
       })

@@ -16,6 +16,7 @@ export const getters = {
       city: state.city,
       country: state.country,
       province: state.province,
+      myActiveActions: state.myActiveActions,
       profileImage: state.profileImage,
       postalCode: state.postalCode,
       companyName: state.companyName,
@@ -26,6 +27,10 @@ export const getters = {
       companyImage: state.companyImage
     }
     return data
+  },
+
+  myActiveActions (state) {
+    return state.myActiveActions
   },
 
   currentCampaignData (state) {
