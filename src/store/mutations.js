@@ -10,6 +10,17 @@ export const mutations = {
       state.authError = 'Password must be at least 8 characters.'
     }
   },
+  [types.ACTIVE_ORDERS_BARISTA] (state, item) {
+    state.activeOrdersBarista = item
+  },
+  [types.ALL_STAFF] (state, item) {
+    state.allStaff = item
+  },
+  
+  [types.ACTIVE_ORDERS] (state, item) {
+    state.activeOrders = item
+  },
+  
   [types.CLEAR_AUTH_ERROR] (state, item) {
     state.authError = null
     state.afterEmailRecovery = null
@@ -72,6 +83,7 @@ export const mutations = {
   },
 
   [types.SAVE_USER_DATA] (state, item) {
+    state.userType = item.type
     state.email = item.email
     state.fullName = item.fullName
     state.emailVerified = item.emailVerified || false

@@ -3,6 +3,161 @@ import firebase from 'firebase'
 import router from '../router'
 
 export const actions = {
+
+  submitOrder (state, item) {
+    console.log('submitting order', item)
+
+    var random = Math.floor(Math.random() * 100000000000000000000)
+    console.log('random', random)
+
+    return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + random).set(item).then((res) => {
+      // The Promise was "fulfilled" (it succeeded).
+      console.log('Success 1 while completing action', res)
+      return {'status': 'ok'}
+    }, function(error) {
+      console.log('Error 1 while completing action', error)
+      return {'status': 'error'}
+    });
+  },
+
+  baristaServeOrder (state, item) {
+    console.log('serving order', item)
+
+    var data = {
+      status: 'served',
+      servedBox: item.boxNumber,
+      dateServed: item.dateServed
+    }
+
+    return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).update(data).then((res) => {
+      console.log('Success 5 while completing action', res)
+      return {'status': 'ok'}
+    }, function(error) {
+      console.log('Error 5 while completing action', error)
+      return {'status': 'error'}
+    });
+  },
+
+  baristaStartOrder (state, item) {
+    console.log('starting order', item)
+
+    var data = {
+      status: 'started',
+      dateStarted: item.dateStarted,
+      barista_name: item.barista_name,
+      barista_id: item.barista_id,
+    }
+
+    return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).update(data).then((res) => {
+      console.log('Success 3 while completing action', res)
+      return {'status': 'ok'}
+    }, function(error) {
+      console.log('Error 3 while completing action', error)
+      return {'status': 'error'}
+    });
+  },
+  completeOrder (state, item) {
+    console.log('completing order', item)
+    return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).update({
+      status: 'completed',
+      dateCompleted: item.date
+    }).then((res) => {
+      // The Promise was "fulfilled" (it succeeded).
+      console.log('Success 2 while completing action', res)
+      return {'status': 'ok'}
+    }, function(error) {
+      console.log('Error 2 while completing action', error)
+      return {'status': 'error'}
+    });
+  },
+  openOrder (state, item) {
+    console.log('completing order', item)
+    return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).update({
+      status: 'open',
+      dateCompleted: item.date
+    }).then((res) => {
+      // The Promise was "fulfilled" (it succeeded).
+      console.log('Success 2 while completing action', res)
+      return {'status': 'ok'}
+    }, function(error) {
+      console.log('Error 2 while completing action', error)
+      return {'status': 'error'}
+    });
+  },
+  watchActiveOrders (state, item) {
+    console.log('watchActiveOrders', item)
+    firebaseInstance.database().ref('/activeOrders/' + (item.uid || '-')).on('value', (snap) => {
+      var orders = snap.val()
+      var activeOrders = []
+      for (var order in orders) {
+        var oneOrder = {
+          orderid: order,
+          order: orders[order]
+        }
+        if (orders[order].status == 'active' ||
+           orders[order].status == 'started' ||
+           orders[order].status == 'served' ||
+           orders[order].status == 'open' ||
+           orders[order].status == 'ready') {
+          activeOrders.push(oneOrder)
+        }
+      }
+      console.log('orders', activeOrders)
+      state.commit('ACTIVE_ORDERS', activeOrders)
+    })
+  },
+  getStoreStaff (state, item) {
+    console.log('getStoreStaff', item)
+    firebaseInstance.database().ref('/staff').once('value', (snap) => {
+      console.log('staff->', snap.val())
+      var staffs = snap.val()
+      var allStaff = []
+
+
+      // color, id, name
+      
+      for (var staff in staffs) {
+        var orders = staffs[staff]
+        var oneStaff = {
+          staffid: staff,
+          staff: staffs[staff]
+        }
+        // if (orders[order].status == 'active' ||
+           // orders[order].status == 'ready') {
+          allStaff.push(oneStaff)
+        // }
+      }
+
+      console.log('staff', allStaff)
+      state.commit('ALL_STAFF', allStaff)
+    }).catch((error) => {
+      console.log('error getStoreStaff', error)
+    })
+  },
+  watchBaristaOrders (state, item) {
+    console.log('watchActiveOrders', item)
+    firebaseInstance.database().ref('/activeOrders').on('value', (snap) => {
+      var users = snap.val()
+      var activeOrders = []
+      
+      for (var user in users) {
+        var orders = users[user]
+        for (var order in orders) {
+          var oneOrder = {
+            orderid: order,
+            order: orders[order]
+          }
+          // if (orders[order].status == 'active' ||
+             // orders[order].status == 'ready') {
+            activeOrders.unshift(oneOrder)
+          // }
+        }
+      }
+
+      console.log('orders', activeOrders)
+      state.commit('ACTIVE_ORDERS_BARISTA', activeOrders)
+    })
+  },
   
   forgotPassword: (state, item) => {
     var auth = firebase.auth()
@@ -63,7 +218,7 @@ export const actions = {
         // }).catch((error) => {
         //   console.log('error sending verification email', error)
         // })
-        router.push('/home')
+        router.push('/main')
       }).catch((error) => {
         console.log('Error getting user data', error)
       })
@@ -96,6 +251,16 @@ export const actions = {
   clearAuthError: (state, item) => {
     state.commit('CLEAR_AUTH_ERROR', {})
   },
+  logout: (state, item) => {
+    firebaseInstance.auth().signOut().then(() => {
+      console.log('signed out...')
+    }, (error) => {
+      console.log('Error when logging out', error)
+    })
+  },
+  loggedIn: (state, item) => { // sets the uid
+    state.commit('LOGGED_IN', item)
+  },
   getUserData: (state, item) => {
     return new Promise((resolve, reject) => {
       console.log('get data for user', item.uid)
@@ -107,26 +272,30 @@ export const actions = {
         var _path = item.path
         if (_path == 'verifyEmail') {
           var key = item.key
-          console.log('key1', key, data.verificationKey)
           if (key == data.verificationKey) {
             firebaseInstance.database().ref('users/' + item.uid + '/emailVerified').set('true', () => {
-              console.log('Verification set')
               state.commit('VERIFY_EMAIL', {})
             }).catch((error) => {
               console.log('Error getting user data', error)
             })
           }
         }
-        console.log('original path:', item.fullPath)
 
         if ((item.fullPath !== '/login') && (item.fullPath !== '/register') && (item.fullPath.indexOf('verifyEmail') == -1)) {
-          // stay here
           if (item.fullPath == '/home') {
-            console.log('home path', data.myActions)
-            state.dispatch('getCampaignActions', data.myActions);
+            if (!data.type) {
+              router.push('/main')
+            } 
+            // state.dispatch('getCampaignActions', data.myActions);
           } 
         } else {
-          router.push('/home')
+          if (data.type == 'admin') {
+            router.push('/home')
+          } else if (data.type == 'bar') {
+            router.push('/home')
+          } else {
+            router.push('/main')
+          } 
         }
         resolve()
       }).catch((error) => {
@@ -134,16 +303,12 @@ export const actions = {
       })
     })
   },
-  logout: (state, item) => {
-    firebaseInstance.auth().signOut().then(() => {
-      console.log('signed out...')
-    }, (error) => {
-      console.log('Error when logging out', error)
-    })
-  },
-  loggedIn: (state, item) => {
-    state.commit('LOGGED_IN', item)
-  },
+
+
+
+
+
+
   getCompanyInfo (state, item) {
     // firebaseInstance.database().ref('companies/' + item.myCompany).once('value', (snap) => {
     //   var companyInfo = snap.val()
@@ -198,30 +363,30 @@ export const actions = {
   searchCampaigns (state, item) {
     console.log('searchCampaigns action', item)
     // clear existing campaigns
-    state.commit('CLEAR_SEARCH_CAMPAIGNS', {})
-    firebaseInstance.database().ref('campaignsShort').orderByValue().limitToFirst(10).startAt(item.query.toLowerCase()).endAt(item.query.toLowerCase()+"\uf8ff").once('value', (snap) => {
-      var campaigns = snap.val()
-      console.log('campaigns returned', campaigns)
-      for (var campaign in campaigns) {
-        const _campaign = campaign
-        console.log('get data for this campaign', campaign)
-        firebaseInstance.database().ref('campaigns/' + campaign).once('value', (campaignSnap) => {
-          var campaignData = campaignSnap.val()
-          console.log('data for one campaign:', campaignData)
-          // populate campaign
-          const data = {
-            id: _campaign,
-            details: campaignData
-          }
-          state.commit('ADD_SEARCH_CAMPAIGN', data)
-        }).catch((error) => {
-          console.log('Error getting data for specific campaign', error)
-        })
-      }
-      // state.commit('SAVE_COMPANY_DATA', data)
-    }).catch((error) => {
-      console.log('Error getting company data', error)
-    })
+    // state.commit('CLEAR_SEARCH_CAMPAIGNS', {})
+    // firebaseInstance.database().ref('campaignsShort').orderByValue().limitToFirst(10).startAt(item.query.toLowerCase()).endAt(item.query.toLowerCase()+"\uf8ff").once('value', (snap) => {
+    //   var campaigns = snap.val()
+    //   console.log('campaigns returned', campaigns)
+    //   for (var campaign in campaigns) {
+    //     const _campaign = campaign
+    //     console.log('get data for this campaign', campaign)
+    //     firebaseInstance.database().ref('campaigns/' + campaign).once('value', (campaignSnap) => {
+    //       var campaignData = campaignSnap.val()
+    //       console.log('data for one campaign:', campaignData)
+    //       // populate campaign
+    //       const data = {
+    //         id: _campaign,
+    //         details: campaignData
+    //       }
+    //       state.commit('ADD_SEARCH_CAMPAIGN', data)
+    //     }).catch((error) => {
+    //       console.log('Error getting data for specific campaign', error)
+    //     })
+    //   }
+    //   // state.commit('SAVE_COMPANY_DATA', data)
+    // }).catch((error) => {
+    //   console.log('Error getting company data', error)
+    // })
   },
   getCampaignActions (state, item) {
     state.commit('CLEAR_CURRENT_ACTIONS', {})
@@ -266,22 +431,22 @@ export const actions = {
   },
   getCampaignData (state, item) {
     console.log('getCampaignData action')
-    firebaseInstance.database().ref('campaigns/' + item.id).once('value', (campaignSnap) => {
-      var campaignData = campaignSnap.val()
-      console.log('data for one campaign:', campaignData)
-      // // populate campaign
-      const data = {
-        id: item.id,
-        details: campaignData
-      }
-      state.commit('CURRENT_CAMPAIGN', data)
-      if (item.after == 'getActions') {
-        var data2 = campaignData.actions
-        state.dispatch('getCampaignActions', data2);
-      }
-    }).catch((error) => {
-      console.log('Error getting data for specific campaign', error)
-    })
+    // firebaseInstance.database().ref('campaigns/' + item.id).once('value', (campaignSnap) => {
+    //   var campaignData = campaignSnap.val()
+    //   console.log('data for one campaign:', campaignData)
+    //   // // populate campaign
+    //   const data = {
+    //     id: item.id,
+    //     details: campaignData
+    //   }
+    //   state.commit('CURRENT_CAMPAIGN', data)
+    //   if (item.after == 'getActions') {
+    //     var data2 = campaignData.actions
+    //     state.dispatch('getCampaignActions', data2);
+    //   }
+    // }).catch((error) => {
+    //   console.log('Error getting data for specific campaign', error)
+    // })
   },
   getMyProjects (state, item) {
     console.log('get my projects', item)

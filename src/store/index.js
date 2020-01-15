@@ -10,6 +10,10 @@ let debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
 	state: {
+    userType: '',    
+    activeOrders: [],
+    activeOrdersBarista: [],
+    allStaff: [],
     authError: null,
     afterEmailRecovery: null,
     uid: null,

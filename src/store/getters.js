@@ -33,6 +33,22 @@ export const getters = {
     return data
   },
 
+  userType (state) {
+    return state.userType
+  },
+
+  allStaff (state) {
+    return state.allStaff
+  },
+
+  activeOrdersBarista (state) {
+    return state.activeOrdersBarista
+  },
+
+  activeOrders (state) {
+    return state.activeOrders
+  },
+
   fullName (state) {
     return state.fullName
   },

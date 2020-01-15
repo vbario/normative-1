@@ -51,6 +51,27 @@ export default new Router({
       props: { dashboardPage: 'company', headerMode: 'full', subPage: 'company' }
     },
     {
+      path: '/server',
+      name: 'MainPage',
+      component: DashboardPage,
+      props: { dashboardPage: 'server' }
+      // props: { dashboardPage: 'main', headerMode: 'full' }
+    },
+    {
+      path: '/barista',
+      name: 'MainPage',
+      component: DashboardPage,
+      props: { dashboardPage: 'barista' }
+      // props: { dashboardPage: 'main', headerMode: 'full' }
+    },
+    {
+      path: '/main',
+      name: 'MainPage',
+      component: DashboardPage,
+      props: { dashboardPage: 'main' }
+      // props: { dashboardPage: 'main', headerMode: 'full' }
+    },
+    {
       path: '/friends',
       name: 'ProjectsPage',
       component: DashboardPage,

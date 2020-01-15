@@ -5,6 +5,9 @@
     <DashboardActiveActions v-if="dashboardPage == 'home'"/>
     <DashboardProjects v-bind:myProjectDetailsList="myProjectDetailsList" v-else-if="dashboardPage == 'projects'"/>
     <DashboardCompany v-else-if="(dashboardPage == 'company') && (subPage == 'company')"/>
+    <DashboardMain v-else-if="(dashboardPage == 'main')"/>
+    <DashboardBarista v-else-if="(dashboardPage == 'barista')"/>
+    <DashboardServer v-else-if="(dashboardPage == 'server')"/>
     <DashboardProfile v-else-if="dashboardPage == 'profile'"/>
     <DashboardCampaign v-else-if="dashboardPage == 'campaign'"/>
     <DashboardActions v-else-if="dashboardPage == 'actions'"/>
@@ -21,6 +24,9 @@
 import DashboardHeader from '../components/DashboardHeader'
 import DashboardHome from '../components/DashboardHome'
 import DashboardProjects from '../components/DashboardProjects'
+import DashboardMain from '../components/DashboardMain'
+import DashboardBarista from '../components/DashboardBarista'
+import DashboardServer from '../components/DashboardServer'
 import DashboardCompany from '../components/DashboardCompany'
 import DashboardProfile from '../components/DashboardProfile'
 import DashboardCampaign from '../components/DashboardCampaign'
@@ -42,6 +48,9 @@ export default {
     DashboardHome,
     DashboardProjects,
     DashboardCompany,
+    DashboardMain,
+    DashboardBarista,
+    DashboardServer,
     DashboardProfile,
     DashboardActions,
     DashboardAction,
@@ -93,8 +102,11 @@ export default {
 <style scoped lang="scss">
   .wrapper {
     width: 100%;
-    max-width: 1280px;
+    /*max-width: 1280px;*/
     min-height: 100vh;
+    position: fixed;
     overflow-x: hidden;
+    overflow-y: auto;
+    top: 0;
   }
 </style>

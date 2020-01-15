@@ -1,36 +1,50 @@
 <template>
   <div class="header-full-width">
-    <div class="header df fdc jcsb" v-bind:class="{'header2' : headerMode == 'full2'}">
+    <div class="header df fdc jcsb">
+
+      <!-- TOP BAR - BAR -->
       <div class="top-section df fdr jcsb">
-        <div v-if="headerMode == 'full2'" class="links2 df fdr">
-          <img class="logo-small" src="../../static/images/HP_Logo_Dash.svg" alt="">
-          <span v-on:click="goTo('/home')" v-bind:class="{'current-page': dashboardPage == 'home'}"><p>My Actions</p></span>
-          <span v-on:click="goTo('/friends')" v-bind:class="{'current-page': dashboardPage == 'projects'}"><p>Friends</p></span>
-          <!-- <span v-on:click="goTo('/tasks')" v-bind:class="{'current-page': dashboardPage == 'tasks'}"><p>Tasks</p></span>
-          <span v-on:click="goTo('/people')" v-bind:class="{'current-page': dashboardPage == 'people'}"><p>People</p></span> -->
-          <span v-on:click="goTo('/explore')" v-bind:class="{'current-page': dashboardPage == 'company'}"><p>Explore</p></span>
-        </div>
-        <img class="bp-logo" src="../../static/images/betterplace-logo.png" alt="">
-        <!-- <img v-if="headerMode == 'full'" class="logo" src="../../static/images/HP_Logo_Dash.svg" alt=""> -->
-        <span class="df fdr jcc aic" v-on:click="toggleProfileMenu()">
-          <img class="profile-image profile-image-smaller" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
-          <!-- <p class="name-profile">{{ $store.getters.userData.fullName }}</p>
-          <img class="chevron-down" src="../../static/images/arrow-red-active-down.svg" alt=""> -->
+        <!-- User thumbnail/name -->
+        <span class="df fdr jcc aic menu-toggle" v-on:click="goTo('/home')">
+          <h1 class="f1 df aic">Super Coffee</h1>
+
+          <!-- Alternate links implementation -->
+          <div class="links2 df fdr" v-if="false">
+            <span v-on:click="goTo('/home')" v-bind:class="{'current-page': dashboardPage == 'home'}"><p>My Actions</p></span>
+            <span v-on:click="goTo('/friends')" v-bind:class="{'current-page': dashboardPage == 'projects'}"><p>Friends</p></span>
+            <span v-on:click="goTo('/explore')" v-bind:class="{'current-page': dashboardPage == 'company'}"><p>Explore</p></span>
+            <span v-on:click="goTo('/main')" v-bind:class="{'current-page': dashboardPage == 'main'}"><p>Main</p></span>
+            <span v-on:click="goTo('/barista')" v-bind:class="{'current-page': dashboardPage == 'barista'}"><p>Barista</p></span>
+          </div>
         </span>
+
+        <h3 class="f1 df aic jcc">{{ pageTitle() }}</h3>
+
+        <!-- User thumbnail/name -->
+        <span class="df fdr jcc aic menu-toggle" v-on:click="toggleProfileMenu()">
+          <img class="profile-image profile-image-smaller" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
+          <p class="name-profile">{{ $store.getters.userData.fullName }}</p>
+          <img class="chevron-down" src="../../static/images/arrow-red-active-down.svg" alt="">
+        </span>
+
+
       </div>
-      <div class="middle-section" v-if="headerMode == 'full2'">
-        <img src="../../static/images/betterplace-logo.png" alt="">
-      </div>
-      <div v-if="headerMode == 'full'" class="links df fdr">
+
+      <!-- USER LINKS -->
+      <div v-if="$store.getters.userType == ''" class="links df fdr">
         <span v-on:click="goTo('/home')" v-bind:class="{'current-page': dashboardPage == 'home'}"><p>My Actions</p></span>
         <span v-on:click="goTo('/friends')" v-bind:class="{'current-page': dashboardPage == 'projects'}"><p>Friends</p></span>
-        <!-- <span v-on:click="goTo('/tasks')" v-bind:class="{'current-page': dashboardPage == 'tasks'}"><p>Tasks</p></span>
-        <span v-on:click="goTo('/people')" v-bind:class="{'current-page': dashboardPage == 'people'}"><p>People</p></span> -->
         <span v-on:click="goTo('/explore')" v-bind:class="{'current-page': dashboardPage == 'company'}"><p>Explore</p></span>
+        <span v-on:click="goTo('/main')" v-bind:class="{'current-page': dashboardPage == 'main'}"><p>Main</p></span>
       </div>
-      <div v-else-if="headerMode == 'full2'" class="links df fdr">
-        <span v-on:click="goTo('/profile')" v-bind:class="{'current-page': dashboardPage == 'profile'}"><p>Profile</p></span>
+
+      <!-- BAR LINKS -->
+      <div v-if="($store.getters.userType == 'bar') && (dashboardPage == 'home')" class="links df fdr">
+        <span v-on:click="goTo('/barista')" v-bind:class="{'current-page': dashboardPage == 'barista'}"><p>Barista</p></span>
+        <span v-on:click="goTo('/server')" v-bind:class="{'current-page': dashboardPage == 'server'}"><p>Server</p></span>
       </div>
+
+      <!-- USER MENU -->
       <div v-if="showProfileMenu" class="profile-menu df fdc jcsb">
         <div class="identity df fdr jcsb">
           <img class="profile-image" v-bind:src="$store.getters.userData.profileImage ? $store.getters.userData.profileImage : '../../static/images/profile_image_placeholder.jpeg'" alt="">
@@ -87,6 +101,26 @@ export default {
 
   },
   methods: {
+    pageTitle () {
+      console.log('pageTitle2', this.$store.getters.userType, this.dashboardPage)
+      if (this.$store.getters.userType == 'bar') {
+        if (this.dashboardPage == 'home') {
+          return 'Bar Control'
+        } else if (this.dashboardPage == 'barista') {
+          return 'Orders'
+        } else if (this.dashboardPage == 'server') {
+          return 'Server'
+        }
+      } else {
+        if (this.dashboardPage == 'home') {
+          return 'Home'
+        } else if (this.dashboardPage == 'main') {
+          return 'Main'
+        } else if (this.dashboardPage == 'server') {
+          return 'Server'
+        }
+      }
+    },
     goTo (path) {
       router.push(path)
     },
@@ -125,15 +159,20 @@ export default {
 }
 
 .links {
-  background-color: #fff;
-  padding-left: 20px;
-  padding-right: 20px;
+  /*background-color: #fff;*/
 }
 
 .links > span {
   margin-right: 20px;
   height: 48px;
-  width: 33%;
+  /*width: 33%;*/
+  flex: 1;
+
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #fff;
+  height: 400px;
+
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -141,13 +180,19 @@ export default {
   display: flex;
   justify-content: center;
   text-align: center;
+  cursor: pointer;
+  margin-top: 5px;
+  border-bottom: 5px solid transparent;
 
+  &:first-of-type {
+    margin-left: 0;
+  }
   &:last-of-type {
     margin-right: 0;
   }
 
   & > p {
-    font-size: 14px;
+    font-size: 34px;
     text-transform: uppercase;
     color: #111111;
     display: -webkit-flex;
@@ -158,7 +203,12 @@ export default {
     justify-content: center;
     -ms-align-items: center;
     align-items: center;
+    cursor: pointer;
   }
+}
+
+.links > .current-page {
+  border-bottom: 5px solid #DD5050;
 }
 
 .links2 > span {
@@ -172,10 +222,6 @@ export default {
     line-height: 24px;
     text-transform: uppercase;
   }
-}
-
-.current-page {
-  border-bottom: 5px solid #DD5050;
 }
 
 .logo {
@@ -196,11 +242,12 @@ export default {
 
 .name-profile {
   color: white;
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 500;
   letter-spacing: 0.46px;
   line-height: 16px;
   color: #010101;
+  margin-left: 10px;
 }
 
 .chevron-down {
@@ -211,8 +258,8 @@ export default {
   position: absolute;
   width: 300px;
   border-radius: 8px;
-  right: 25px;
-  top: 65px;
+  left: 50px;
+  top: 50px;
   background-color: #f5f5f5;
   box-shadow: 0 1px 4px 0 rgba(0,0,0,0.28);
   z-index: 100;
@@ -260,6 +307,7 @@ export default {
   padding-top: 10px;
 
   & > span {
+    cursor: pointer;
     padding: 15px 30px;
     display: -webkit-flex;
     display: -moz-flex;
@@ -269,6 +317,10 @@ export default {
     font-size: 14px;
     text-transform: uppercase;
     font-weight: 500;
+
+    & > * {
+      cursor: pointer;
+    }
 
     &:hover {
       background-color: white;
@@ -319,4 +371,22 @@ export default {
 .bp-logo {
   object-fit: contain;
 }
+
+.menu-toggle {
+  cursor: pointer;
+  width: 222px;
+
+  & > * {
+    cursor: pointer;
+  }
+
+  &:hover {
+    /*opacity: 0.8;*/
+  }
+}
+
+.middle-section {
+  margin-bottom: 30px;
+}
+
 </style>

@@ -20,12 +20,30 @@ export default {
   components: {
   },
   methods: {
+    getUserData () {
+      var path = this.$route.path
+      var _path = path.substr(1, path.lastIndexOf('/') - 1)
+      var key = path.substr(path.lastIndexOf('/') + 1, path.length)
 
+      console.log('before user data', this.$store.getters.uid)
+
+      this.$store.dispatch('getUserData', {
+        uid: this.$store.getters.uid,
+        fullPath: path,
+        path: _path,
+        key: key
+      }).then(() => {
+        console.log('After getting user data', this.$store.getters.userData)
+        // this.getCompanyData()
+        // this.getMyProjects()
+      })
+    }
   },
   computed: {
 
   },
   created () {
+    this.getUserData()
     // console.log('** Login Component Loaded')
   }
 }
