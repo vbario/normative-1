@@ -6,7 +6,7 @@
       <div class="top-section df fdr jcsb">
         <!-- User thumbnail/name -->
         <span class="df fdr jcc aic menu-toggle" v-on:click="goTo('/home')">
-          <h1 class="f1 df aic">Super Coffee</h1>
+          <h1 class="f1 df aic">{{ backButton ? '< ' : '' }}Super Coffee</h1>
 
           <!-- Alternate links implementation -->
           <div class="links2 df fdr" v-if="false">
@@ -96,7 +96,7 @@ export default {
       showProfileMenu: false
     }
   },
-  props: ['dashboardPage', 'headerMode'],
+  props: ['dashboardPage', 'headerMode', 'backButton', 'setBackButton'],
   components: {
 
   },
@@ -113,15 +113,16 @@ export default {
         }
       } else {
         if (this.dashboardPage == 'home') {
-          return 'Home'
+          // return 'Home'
         } else if (this.dashboardPage == 'main') {
-          return 'Main'
+          // return 'Main'
         } else if (this.dashboardPage == 'server') {
           return 'Server'
         }
       }
     },
     goTo (path) {
+      this.setBackButton(false)
       router.push(path)
     },
     toggleProfileMenu () {
@@ -150,13 +151,13 @@ export default {
   width: 100%;
   align-self: center;
   /*background-color: #232E37;*/
-  padding: 0px 48px 0px;
+  padding: 0px $space1 0px;
   position: relative;
   max-width: 1280px;
 }
 
 .header2 {
-  padding: 10px 48px 0px;
+  padding: 10px $space1 0px;
 }
 
 .links {
@@ -375,7 +376,7 @@ export default {
 
 .menu-toggle {
   cursor: pointer;
-  width: 222px;
+  /*width: 222px;*/
 
   & > * {
     cursor: pointer;

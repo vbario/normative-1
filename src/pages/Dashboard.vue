@@ -1,11 +1,13 @@
 <template>
   <div class="wrapper df fdc jcc aic jcsb">
     <DashboardHeader  v-bind:dashboardPage="dashboardPage"
-                      v-bind:headerMode="headerMode"/>
+                      v-bind:headerMode="headerMode"
+                      v-bind:backButton="backButton"
+                      v-bind:setBackButton="setBackButton"/>
     <DashboardActiveActions v-if="dashboardPage == 'home'"/>
     <DashboardProjects v-bind:myProjectDetailsList="myProjectDetailsList" v-else-if="dashboardPage == 'projects'"/>
     <DashboardCompany v-else-if="(dashboardPage == 'company') && (subPage == 'company')"/>
-    <DashboardMain v-else-if="(dashboardPage == 'main')"/>
+    <DashboardMain v-else-if="(dashboardPage == 'main')" v-bind:setBackButton="setBackButton"/>
     <DashboardBarista v-else-if="(dashboardPage == 'barista')"/>
     <DashboardServer v-else-if="(dashboardPage == 'server')"/>
     <DashboardProfile v-else-if="dashboardPage == 'profile'"/>
@@ -39,6 +41,7 @@ export default {
   name: 'Dashboard',
   data () {
     return {
+      backButton: false,
       myProjectDetailsList: {}
     }
   },
@@ -63,7 +66,10 @@ export default {
     // DashboardPricing
   },
   methods: {
-
+    setBackButton(backButton) {
+      console.log('backButton', backButton)
+      this.backButton = backButton
+    }
   },
   computed: {
 
@@ -105,7 +111,7 @@ export default {
     width: 100%;
     /*max-width: 1280px;*/
     min-height: 100vh;
-    position: fixed;
+    /*position: fixed;*/
     overflow-x: hidden;
     overflow-y: auto;
     top: 0;

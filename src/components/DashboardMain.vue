@@ -1,6 +1,19 @@
 <template>
   <div class="wrap page1 f1 df fdc aic">
 
+    <!-- MENU -->
+    <div v-if="openOrder.open" class="wrap-inner df fdr fww aifs">
+      <!-- <div class="w100p _s1 curp" v-on:click="backToHome()">
+        <p>< back</p>
+      </div> -->
+      <div v-for="(type, typeid) in this.menu ? this.menu.items : []" v-bind:class="'menu-button item-button menu-button-color-' + type.name.toLowerCase()" v-on:click="openItemMenu('new', type.name.toLowerCase())">
+        <p>{{ type.name }}</p>
+      </div>
+    </div>
+
+
+
+    <!-- OPEN ITEM -->
     <div class="wrap-inner f1 df fdc aic" v-if="menu && openOrder.open && openItem">
       <h1 class="type product-type-title">{{ openItem.type.toUpperCase() }}</h1>
 
@@ -12,16 +25,15 @@
         </span>
       </span>
 
+      <!-- SIZE -->
       <span class="df row-wrapper">
-
         <span v-for="(size, id) in openItem.sizes" v-on:click="setSize(size.name)" class="menu-button size-setting df fdc" v-bind:class="{'menu-button-selected': openItem.size == size.name}">
           <p>{{ size.name }}</p>
           <p class="size-price">{{ formatPrice(size.price) }}</p>
         </span>
-
       </span>
 
-      <!-- IF NOT COOKIE -->
+      <!-- OPTIONS -  IF NOT COOKIE -->
       <h2 class="product-type-extras" v-if="openItem.type.toLowerCase() !== 'cookie'">
         Extras
       </h2>
@@ -67,7 +79,6 @@
         </span>
       </span>
 
-
       <span class="menu-button menu-button-color-5" v-on:click="addItem()">
         <p>
           Add
@@ -80,19 +91,8 @@
       </span>
     </div>
 
-    <div v-else-if="openOrder.open" class="wrap-inner df fdr fww aifs">
-
-      <div v-for="(type, typeid) in this.menu ? this.menu.items : []" v-bind:class="'menu-button item-button menu-button-color-' + type.name.toLowerCase()" v-on:click="openItemMenu('new', type.name.toLowerCase())">
-        <p>{{ type.name }}</p>
-      </div>
-
-      <div class="menu-button menu-button-color-1" v-on:click="backToHome()">
-        <p>Back</p>
-      </div>
-
-    </div>
-
-    <div v-else class="wrap-inner f1 df fdc aic">
+    <!-- CURRENT ORDERS -->
+    <div v-if="!openOrder.open && !openItem" class="wrap-inner f1 df fdc aic">
       <h3 class="_s01 w100p df" v-if="$store.getters.activeOrders.length > 0">Current Order{{$store.getters.activeOrders.length > 1 ? 's' : ''}}</h3>
       <div class="menu-preset _s01" v-for="(order, id) in $store.getters.activeOrders" v-if="$store.getters.activeOrders.length > 0">
         <span class="order-actions df aic jcc">
@@ -148,9 +148,9 @@
     </div>
 
     <!-- CART TAB -->
-    <span class="up-tab" v-on:click="flipCart()">
+    <!-- <span class="up-tab" v-on:click="flipCart()">
       {{ showCart ? 'down' : 'up' }}
-    </span>
+    </span> -->
 
     <!-- PAST ORDERS -->
     <div class="cart posrel df fdc" v-if="showPastOrders">
@@ -211,7 +211,7 @@
     </div>
 
     <!-- CART -->
-    <div class="cart posrel df fdc" v-if="showCart">
+    <div class="cart posrel df fdc" v-if="openOrder.open && !openItem">
       <h3 class="_s1">Complete Your Order</h3>
       <p v-if="openOrder.items.length == 0" class="_s1">No items selected</p>
       <span v-for="(item, id) in openOrder.items" class="cart-item df">
@@ -236,12 +236,12 @@
       <h3 class="cart-total _s1 df jcfe">
         Total {{ formatPrice(openOrderTotal() * 1.13) }}
       </h3>
-      <span v-if="openOrder.items.length == 0" class="complete-order menu-button menu-button-color-5" v-on:click="flipCart()">
+      <!-- <span v-if="openOrder.items.length == 0" class="complete-order menu-button menu-button-color-5" v-on:click="flipCart()">
         <p>
           See The Menu
         </p>
-      </span>
-      <span v-else class="complete-order menu-button menu-button-color-5" v-on:click="submitOrder()">
+      </span> -->
+      <span v-if="openOrder.items.length > 0" class="complete-order menu-button menu-button-color-5" v-on:click="submitOrder()">
         <p>
           Complete Order
         </p>
@@ -274,7 +274,7 @@ export default {
       showSaveAsFavoriteText: ''
     }
   },
-  props: [],
+  props: ['setBackButton'],
   components: {
     CampaignCard,
     OrderCard1
@@ -317,6 +317,7 @@ export default {
         open: true,
         items: order.order.cart.items
       }
+      this.setBackButton(true)
       this.showPastOrders = false
       this.showCart = true
     },
@@ -463,6 +464,7 @@ export default {
     },
     backToHome () {
       this.openOrder.open = false
+      this.setBackButton(false)
     },
     submitOrder () {
       var _date = new Date()
@@ -475,6 +477,7 @@ export default {
         datePlaced: _date
       }).then((data) => {
         if (data.status == 'ok') {
+          this.setBackButton(true)
           this.openOrder = this.startOrder()
           this.showCart = false
         } else { 
@@ -589,6 +592,7 @@ export default {
       } else {
         console.log('--->>', this.menu)
         this.openOrder = {...this.startOrder(this.menu, 'Coffee'), open: true}
+        this.setBackButton(true)
       }
     },
     showCampaigns () {
@@ -607,17 +611,24 @@ export default {
 
   },
   created () {
+    // ,,,
     // this.searchCampaigns()
-    setTimeout(() => {
-      console.log('this...', this.$store.getters.menu)
-      this.menu = this.$store.getters.menu
-    }, 2500)
+
+    this.waitForMenu = setInterval(() => {
+      console.log('*****this...', this.$store.getters.menu)
+      if (this.$store.getters.menu.items) {
+        this.menu = this.$store.getters.menu
+        clearInterval(this.waitForMenu)
+      } else {
+      }
+    }, 200)
     // console.log('** Login Component Loaded')
   }
 }
 </script>
 
 <style scoped lang="scss">
+@import "../styles/settings.scss";
 .wrap {
   width: 100%;
   padding: 0;
@@ -627,10 +638,10 @@ export default {
   display: -ms-flex;
   display: -o-flex;
   display: flex;
-  max-height: calc(100vh - 90px);
-  overflow: hidden;
+  /*max-height: calc(100vh - 90px);*/
+  /*overflow: hidden;*/
   /* overflow-x: visible; */
-  overflow-y: auto;
+  /*overflow-y: auto;*/
 }
 
 .product-type-title {
@@ -643,14 +654,15 @@ export default {
 }
 
 .wrap-inner {
-  padding: 50px;
+  padding: $space1;
+  padding-top: 0;
 /*  -webkit-flex-wrap: wrap;
   -moz-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   -o-flex-wrap: wrap;
   flex-wrap: wrap;*/
   width: 100%;
-  max-width: 500px;
+  /*max-width: 500px;*/
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -773,19 +785,19 @@ $color1: lighten(#E82405, 13);
   left: calc(100% + 70px);
 }
 .cart {
-  overflow-y: auto;
-  position: absolute;
-  bottom: 0;
+  /*overflow-y: auto;*/
+  /*position: absolute;*/
+  /*bottom: 0;*/
   background-color: white;
   width: 100%;
-  max-width: 500px;
-  height: 90%;
+  /*max-width: 500px;*/
+  /*height: 50%;*/
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
   display: -o-flex;
   display: flex;
-  padding: 40px;
+  padding: $space1;
   /*opacity: 0;*/
 }
 .up-tab {
@@ -869,15 +881,21 @@ $color1: lighten(#E82405, 13);
 }
 
 .item-button {
-  width: unset;
+  /*width: unset;*/
   /*flex: 1;*/
-  width: calc(50% - 4px);
-  margin-bottom: 4px;
-  margin-right: 2px;
+  /*width: calc(50% - 4px);*/
+  /*flex: 1;*/
+  width: 25%;
+  /*margin-bottom: 4px;*/
+  /*margin-right: 10px;*/
 
-  &:nth-of-type(even) {
+  & > p {
+    font-size: 24px;
+  }
+
+  &:last-of-type {
     margin-right: 0;
-    margin-left: 2px;
+    /*margin-left: 2px;*/
   }
 }
 .size-price {
@@ -953,7 +971,10 @@ $color1: lighten(#E82405, 13);
   background-color: #aaa
 }
 .favorites-wrapper {
-    /*overflow-y: auto;*/
-  }
+  /*overflow-y: auto;*/
+}
+.menu-button-color-cookie {
+  /*width: 100%;*/
+}
 </style>
 

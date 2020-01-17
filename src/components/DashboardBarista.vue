@@ -208,8 +208,8 @@ export default {
 }
 
 .row-wrapper {
-  overflow-y: auto;
-  height: calc(100vh - #{$headerHeight});
+  /*overflow-y: auto;*/
+  /*height: calc(100vh - #{$headerHeight});*/
 }
 </style>
 

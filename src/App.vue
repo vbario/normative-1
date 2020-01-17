@@ -611,7 +611,7 @@ export default {
   background-color: $color3;
 }
 
-.menu-button-color-latte, .menu-button-color-capuccino {
+.menu-button-color-latte, .menu-button-color-cappucino {
   background-color: $color4;
 }
 
@@ -781,12 +781,12 @@ $color1: lighten(#E82405, 13);
   /*transform: translate(0, -50%);*/
 }
 .cart {
-  position: absolute;
+  /*position: absolute;*/
   bottom: 0;
   background-color: white;
   width: 100%;
-  max-width: 500px;
-  height: 90%;
+  /*max-width: 500px;*/
+  /*height: 90%;*/
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
