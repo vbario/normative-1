@@ -100,6 +100,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  @import "../styles/settings.scss";
   .wrapper {
     width: 100%;
     /*max-width: 1280px;*/

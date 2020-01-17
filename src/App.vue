@@ -57,8 +57,12 @@ export default {
           this.$store.dispatch('watchBaristaOrders', {})
           this.$store.dispatch('getStoreStaff', {})
         } else {
+          this.$store.dispatch('getMenu', {})
           this.$store.dispatch('watchActiveOrders', {
             uid: this.$store.getters.uid
+          })
+          this.$store.dispatch('watchMyFavorites', {
+            userid: this.$store.getters.uid
           })
         }
       })
@@ -173,6 +177,14 @@ export default {
     -ms-flex-direction: row;
     -o-flex-direction: row;
     flex-direction: row;
+  }
+
+  .jcfe {
+    justify-content: flex-end;
+  }
+
+  .jcfs {
+    justify-content: flex-start;
   }
 
   .jcc {
@@ -586,6 +598,27 @@ export default {
   background-color: $color5;
 }
 
+
+
+.menu-button-color-espresso {
+}
+
+.menu-button-color-special {
+  background-color: $color2;
+}
+
+.menu-button-color-cookie {
+  background-color: $color3;
+}
+
+.menu-button-color-latte, .menu-button-color-capuccino {
+  background-color: $color4;
+}
+
+.menu-button-color-5 {
+  background-color: $color5;
+}
+
 .menu-preset {
   display: -webkit-flex;
   display: -moz-flex;
@@ -593,7 +626,13 @@ export default {
   display: -o-flex;
   display: flex;
 
+  min-height: 85px;
+
   width: 100%;
+
+  & > span {
+    padding: 5px;
+  }
 
   & > span:nth-child(1) {
     width: 100px;
@@ -605,11 +644,13 @@ export default {
     justify-content: flex-start;
     -ms-align-items: flex-start;
     align-items: center;
+    margin-left: 0;
+    width: 85px;
+    /*background-color: grey;*/
 
     img {
-      width: 85px;
-      height: 85px;
-      background-color: grey;
+      /*height: 85px;*/
+      /*background-color: grey;*/
       /*border-radius: 50%*/
     }
   }
@@ -776,6 +817,10 @@ $color1: lighten(#E82405, 13);
   background-color: white;
 }
 
+._s01 {
+  margin-bottom: 10px;
+}
+
 ._s1 {
   margin-bottom: 20px;
 }
@@ -821,7 +866,6 @@ $color1: lighten(#E82405, 13);
 }
 
 .open-button {
-  width: 120px;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -853,5 +897,26 @@ $color1: lighten(#E82405, 13);
 }
 .tac {
   text-align: center;
+}
+.fww {
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  -o-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.aifs {
+  -ms-align-items: flex-start;
+  align-items: flex-start;
+}
+.w100p {
+  width: 100%;
+}
+.curp {
+  cursor: pointer;
+
+  & > * {
+    cursor: pointer;
+  }
 }
 </style>

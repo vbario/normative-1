@@ -10,6 +10,12 @@ export const mutations = {
       state.authError = 'Password must be at least 8 characters.'
     }
   },
+  [types.SET_MENU] (state, item) {
+    state.menu = item
+  },
+  [types.MY_FAVORITES] (state, item) {
+    state.myFavorites = item
+  },
   [types.ACTIVE_ORDERS_BARISTA] (state, item) {
     state.activeOrdersBarista = item
   },
@@ -19,6 +25,10 @@ export const mutations = {
   
   [types.ACTIVE_ORDERS] (state, item) {
     state.activeOrders = item
+  },
+  
+  [types.COMPLETED_ORDERS] (state, item) {
+    state.completedOrders = item
   },
   
   [types.CLEAR_AUTH_ERROR] (state, item) {

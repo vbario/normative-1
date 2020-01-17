@@ -145,6 +145,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../styles/settings.scss";
 .header {
   width: 100%;
   align-self: center;
@@ -258,7 +259,7 @@ export default {
   position: absolute;
   width: 300px;
   border-radius: 8px;
-  left: 50px;
+  right: 50px;
   top: 50px;
   background-color: #f5f5f5;
   box-shadow: 0 1px 4px 0 rgba(0,0,0,0.28);
@@ -349,7 +350,7 @@ export default {
   /*position: absolute;*/
   top: 0;
   left: 0;
-  /*height: 100px;*/
+  min-height: $headerHeight;
   width: 100vw;
   /*background-color: grey;*/
   display: -webkit-flex;

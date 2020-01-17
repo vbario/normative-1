@@ -38,6 +38,71 @@ export const actions = {
     });
   },
 
+  baristaWithdrawOrder (state, item) {
+    console.log('serving order', item)
+
+    var data = {
+      status: 'started',
+      servedBox: item.boxNumber,
+      dateWithdrawn: item.dateWithdrawn
+    }
+
+    return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).update(data).then((res) => {
+      console.log('Success 5 while completing action', res)
+      return {'status': 'ok'}
+    }, function(error) {
+      console.log('Error 5 while completing action', error)
+      return {'status': 'error'}
+    });
+  },
+
+  baristaNoPickupOrder (state, item) {
+    console.log('serving order', item)
+
+    return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).once('value').then((res) => {
+      console.log('Success 5 while completing action', res)
+      var order = res.val()
+        order = {...order, ...{
+        status: 'no_pickup',
+        servedBox: item.boxNumber,
+        dateNoPickup: item.dateNoPickup
+      }}
+      return firebaseInstance.database().ref('noPickupOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).set(order).then((res) => {
+        console.log('Success 2.5 while completing action', order)
+        return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).remove().then((res) => {
+          console.log('Success 2.7 while completing action', order)
+          return {'status': 'ok'}
+        }, function(error) {
+          console.log('Error 2.7 while completing action', error)
+          return {'status': 'error'}
+        });
+      }, function(error) {
+        console.log('Error 2.5 while completing action', error)
+        return {'status': 'error'}
+      });
+    }, function(error) {
+      console.log('Error 5 while completing action', error)
+      return {'status': 'error'}
+    });
+  },
+
+  saveAsFavorite (state, item) {
+    console.log('starting order', item)
+
+    var data = item
+    var random = Math.floor(Math.random() * 100000000000000000).toString()
+
+    console.log('path', 'favorites/' + (data.userid || '-') + '/' + (random || '-'))
+
+    return firebaseInstance.database().ref('favorites/' + (item.userid || '-') + '/' + (random || '-')).update({...data.order, orderid: 0, preset_name: data.name}).then((res) => {
+      console.log('Success 10 while completing action', res)
+      return {'status': 'ok'}
+    }, function(error) {
+      console.log('Error 10 while completing action', error)
+      return {'status': 'error'}
+    });
+  },
+
   baristaStartOrder (state, item) {
     console.log('starting order', item)
 
@@ -56,15 +121,51 @@ export const actions = {
       return {'status': 'error'}
     });
   },
+
+  requestRefund (state, item) {
+    console.log('starting order', item) // userid, orderid
+
+    var _date = new Date()
+    _date = parseInt(_date.getTime())
+    var newData = {...item.order.order, dateRefunded: _date}
+
+    return firebaseInstance.database().ref('refundedOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).set(newData).then((res) => {
+      console.log('Success 13 while completing action', res)
+        return firebaseInstance.database().ref('completedOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).update({dateRefunded: _date}).then((res) => {
+        console.log('Success 131 while completing action', res)
+        return {'status': 'ok'}
+      }, function(error) {
+        console.log('Error 131 while completing action', error)
+        return {'status': 'error'}
+      });
+    }, function(error) {
+      console.log('Error 13 while completing action', error)
+      return {'status': 'error'}
+    });
+  },
   completeOrder (state, item) {
     console.log('completing order', item)
-    return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).update({
-      status: 'completed',
-      dateCompleted: item.date
-    }).then((res) => {
-      // The Promise was "fulfilled" (it succeeded).
-      console.log('Success 2 while completing action', res)
-      return {'status': 'ok'}
+    return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).once('value').then((res) => {
+      // The Promise was fulfilled (it succeeded).
+      var order = res.val()
+      order = {...order, ...{
+        status: 'completed',
+        dateCompleted: item.date.toString()
+      }}
+      console.log('order..', order)
+      return firebaseInstance.database().ref('completedOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).set(order).then((res) => {
+        console.log('Success 2.5 while completing action', order)
+        return firebaseInstance.database().ref('activeOrders/' + (item.userid || '-') + '/' + (item.orderid || '-')).remove().then((res) => {
+          console.log('Success 2.7 while completing action', order)
+          return {'status': 'ok'}
+        }, function(error) {
+          console.log('Error 2.7 while completing action', error)
+          return {'status': 'error'}
+        });
+      }, function(error) {
+        console.log('Error 2.5 while completing action', error)
+        return {'status': 'error'}
+      });
     }, function(error) {
       console.log('Error 2 while completing action', error)
       return {'status': 'error'}
@@ -83,6 +184,31 @@ export const actions = {
       console.log('Error 2 while completing action', error)
       return {'status': 'error'}
     });
+  },
+  getPastOrders (state, item) {
+    console.log('getPastOrders', item)
+    firebaseInstance.database().ref('/completedOrders/' + (item.userid || '-')).once('value', (snap) => {
+      var orders = snap.val()
+      console.log('**', orders)
+      var completedOrders = []
+      for (var order in orders) {
+        var oneOrder = {
+          orderid: order,
+          order: orders[order]
+        }
+        completedOrders.push(oneOrder)
+      }
+      console.log('completedOrders', completedOrders)
+      state.commit('COMPLETED_ORDERS', completedOrders)
+    })
+  },
+  watchMyFavorites (state, item) {
+    console.log('watchMyFavorites', item)
+    firebaseInstance.database().ref('/favorites/' + (item.userid || '-')).on('value', (snap) => {
+      var favorites = snap.val()
+      console.log('favorites', favorites)
+      state.commit('MY_FAVORITES', favorites)
+    })
   },
   watchActiveOrders (state, item) {
     console.log('watchActiveOrders', item)
@@ -156,6 +282,14 @@ export const actions = {
 
       console.log('orders', activeOrders)
       state.commit('ACTIVE_ORDERS_BARISTA', activeOrders)
+    })
+  },
+  getMenu (state, item) {
+    console.log('getMenu', item)
+    firebaseInstance.database().ref('/menu').once('value', (snap) => {
+      var menu = snap.val()
+      console.log('menu', menu)
+      state.commit('SET_MENU', menu)
     })
   },
   

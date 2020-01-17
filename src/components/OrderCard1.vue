@@ -1,35 +1,42 @@
 <template>
   <div class="df fdc order-card posrel f1">
     <!-- <p class="order-id">{{ order.orderid }}</p> -->
-    <span v-for="(item, itemid) in order.order.cart.items" class="item df fdr asc f1 aic">
-      <span class="item-quantity">
-        {{item.quantity}}
+    <span v-for="(item, itemid) in order.order.cart.items" class="item df fdr asc f1">
+      <span class="df fdc">
+        <span class="df">
+          <span class="item-quantity">
+            {{item.quantity}}
+          </span>
+          <span class="df fdc item-type">
+            <h3>
+              <span class="capitalize">{{item.type}}</span>
+            </h3>
+            <p>
+              <span class="capitalize coffee-size">{{item.size}}</span>
+            </p>
+          </span>
+        </span>
+        <span class="df fdr">
+          <span class="df fdc option-column jcc">
+            <span v-for="(cream, creamid) in item.details.cream" class="options">
+              <span class="extra-quantity">{{cream.quantity}}</span> {{cream.type}}
+            </span>
+          </span>
+          <span class="df fdc option-column jcc">
+            <span v-for="(sugar, sugarid) in item.details.sugar" class="options">
+              <span class="extra-quantity">{{sugar.quantity}}</span> {{sugar.type}}
+            </span>
+          </span>
+
+          <span class="df fdc option-column jcc">
+            <span v-for="(extra, extraid) in item.details.extras" class="options" v-if="extra.quantity && (extra.type.toLowerCase() !== 'extra')">
+              <span class="extra-quantity">+</span> {{ extra.type }}
+            </span>
+          </span>
+        </span>
       </span>
-      <span class="df fdr">
-        <span class="df fdc item-type">
-          <h3>
-            <span class="capitalize">{{item.type}}</span>
-          </h3>
-          <p>
-            <span class="capitalize coffee-size">{{item.size}}</span>
-          </p>
-        </span>
-        <span class="df fdc option-column jcc">
-          <span v-for="(cream, creamid) in item.details.cream" class="options">
-            <span class="extra-quantity">{{cream.quantity}}</span> {{cream.type}}
-          </span>
-        </span>
-        <span class="df fdc option-column jcc">
-          <span v-for="(sugar, sugarid) in item.details.sugar" class="options">
-            <span class="extra-quantity">{{sugar.quantity}}</span> {{sugar.type}}
-          </span>
-        </span>
-        <span class="df fdc option-column jcc">
-          <span v-for="(extra, extraid) in item.details.extras" v-if="extra.status" class="options">
-            {{extra.value}}
-          </span>
-        </span>
-      </span>
+
+      <span v-if="price" class="df jcc aic">{{formatPrice(item.quantity * item.sizes.filter(v => v.name.toLowerCase() == item.size.toLowerCase())[0].price)}}</span>
     </span>
   </div>
 </template>
@@ -44,11 +51,24 @@ export default {
       // mode: 'login' // login/register
     }
   },
-  props: ['id', 'order'],
+  props: ['id', 'order', 'price'],
   components: {
 
   },
   methods: {
+    formatPrice (amount, digits) {
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: digits || 2
+      })
+
+      if (amount) {
+        return formatter.format(amount/100)
+      } else {
+        return 0
+      }
+    },
   },
   computed: {
   },
@@ -78,21 +98,27 @@ h3 {
   right: 0;
   top: 0;
 }
-.options {
-  margin-left: 20px;
-}
 .coffee-size, .options {
   font-size: 18px;
 }
 ._s01 {
   margin-bottom: 5px;
 }
+
+$itemQuantity: 80px;
+
 .item-quantity {
   font-size: 45px;
   font-weight: 500;
+  width: $itemQuantity;
+}
+.options {
+  margin-left: $itemQuantity;
 }
 .item {
   margin-bottom: 20px;
+  /*border-bottom: 1px solid #cdcdcd;*/
+  padding-bottom: 20px;
 
   &:last-child {
     margin-bottom: 0;

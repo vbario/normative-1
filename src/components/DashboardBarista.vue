@@ -34,6 +34,12 @@
 
 
       </span>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
 
       <span v-if="openOrder || (openOrder === 0)" class="order-detail df fdc jcc aic">
         <span v-for="(item, itemid) in $store.getters.activeOrdersBarista[openOrder].order.cart.items" class="df jcc aic">
@@ -148,7 +154,7 @@ export default {
 .wrap {
   width: 100%;
   padding: 0;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -199,6 +205,11 @@ export default {
 .time {
   font-size: 28px;
   margin-right: 20px;
+}
+
+.row-wrapper {
+  overflow-y: auto;
+  height: calc(100vh - #{$headerHeight});
 }
 </style>
 

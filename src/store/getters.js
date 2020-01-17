@@ -33,6 +33,14 @@ export const getters = {
     return data
   },
 
+  menu (state) {
+    return state.menu
+  },
+
+  myFavorites (state) {
+    return state.myFavorites
+  },
+
   userType (state) {
     return state.userType
   },
@@ -47,6 +55,10 @@ export const getters = {
 
   activeOrders (state) {
     return state.activeOrders
+  },
+
+  completedOrders (state) {
+    return state.completedOrders
   },
 
   fullName (state) {
