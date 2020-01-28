@@ -1,6 +1,4 @@
-# pizza-test
-
-> test
+# App
 
 ## Build Setup
 
@@ -12,4 +10,3 @@ npm install
 npm start
 ```
 =======
-# pizzafactory_test
