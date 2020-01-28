@@ -1,30 +1,35 @@
 <template>
-  <div class="">
-      <Home />
+  <div class="stations-list-row df jcsb">
+    <span>
+      <p>
+        {{ name }}
+      </p>
+    </span>
+    <span>
+      <p>
+        {{ bikes }}
+      </p>
+    </span>
   </div>
 </template>
 
 <script>
-import Home from '../components/Home'
-
 export default {
-  name: 'Landing',
+  name: 'StationsListRow',
   data () {
     return {
+      sortBy: ''
     }
   },
-  props: ['mode'],
+  props: ['name', 'bikes'],
   components: {
-    Home
   },
   methods: {
-
   },
   computed: {
 
   },
   created () {
-    console.log('* Landing.vue loaded')
   }
 }
 </script>

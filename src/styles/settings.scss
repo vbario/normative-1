@@ -1,10 +1,11 @@
-$color1: lighten(#E82405, 13);
-$color2: lighten(#E86F05, 13);
-$color3: lighten(#E88505, 13);
-$color4: lighten(#FF5512, 13);
-$color5: lighten(#176CFF, 13);
+$backgroundColor: #275998;
+$buttonColor: orange;
 
-$space1: 25px;
-$maxWidth1: 1280px;
-
-$headerHeight: 80px;
+$bottomSpaceSize1: 20px;
+._bss1 {
+    margin-bottom: $bottomSpaceSize1;
+}
+$bottomSpaceSize2: 10px;
+._bss2 {
+    margin-bottom: $bottomSpaceSize2;
+}
